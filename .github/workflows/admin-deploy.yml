@@ -1,4 +1,4 @@
-name: admin deploy
+name: deploy for prod
 
 on:
   workflow_dispatch:
