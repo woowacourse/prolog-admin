@@ -1,4 +1,3 @@
-import React from 'react';
 import { Menu } from 'react-admin';
 import LabelIcon from '@mui/icons-material/Label';
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';

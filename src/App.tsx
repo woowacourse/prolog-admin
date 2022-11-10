@@ -1,4 +1,3 @@
-import React from 'react';
 import { Admin, Resource, CustomRoutes } from 'react-admin';
 import jsonServerProvider from 'ra-data-json-server';
 import MissionCreate from './components/MissionCreate';
