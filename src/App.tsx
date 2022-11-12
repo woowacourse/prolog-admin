@@ -1,13 +1,13 @@
 import { Admin, Resource, CustomRoutes } from 'react-admin';
 import jsonServerProvider from 'ra-data-json-server';
-import MissionCreate from './components/MissionCreate';
-import Missions from './components/Missions';
-import Sessions from './components/Sessions';
-import SessionCreate from './components/SessionCreate';
-import PopularStudylogsUpdate from './components/PopularStudylogsUpdate';
+import MissionCreate from './components/react-admin/MissionCreate';
+import SessionCreate from './components/react-admin/SessionCreate';
 import { Route } from 'react-router-dom';
-import MyLayout from './components/Layout';
+import MyLayout from './components/custom/Layout';
 import { BASE_URL } from './client';
+import Missions from './components/react-admin/Missions';
+import Sessions from './components/react-admin/Sessions';
+import PopularStudylogsUpdate from './components/custom/PopularStudylogsUpdate';
 
 const dataProvider = jsonServerProvider(BASE_URL);
 

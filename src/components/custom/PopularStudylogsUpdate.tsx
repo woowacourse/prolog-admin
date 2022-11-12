@@ -1,5 +1,5 @@
 import Button from '@mui/material/Button';
-import { useGetPopularStudylogs } from '../hooks/studylog';
+import { useGetPopularStudylogs } from '../../hooks/studylog';
 
 const PopularStudylogsUpdate = () => {
   const { refetch } = useGetPopularStudylogs();
