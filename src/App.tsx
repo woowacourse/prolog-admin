@@ -7,8 +7,9 @@ import SessionCreate from './components/SessionCreate';
 import PopularStudylogsUpdate from './components/PopularStudylogsUpdate';
 import { Route } from 'react-router-dom';
 import MyLayout from './components/Layout';
+import { BASE_URL } from './client';
 
-const dataProvider = jsonServerProvider(`${process.env.REACT_APP_API_URL}`);
+const dataProvider = jsonServerProvider(BASE_URL);
 
 function App() {
   return (
