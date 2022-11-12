@@ -1,16 +1,17 @@
 import Button from '@mui/material/Button';
+import { useGetPopularStudylogs } from '../hooks/studylog';
 
 const PopularStudylogsUpdate = () => {
-  const updatePopularStudylogs = () => {
+  const { refetch } = useGetPopularStudylogs();
+
+  const onClickUpdateButton = () => {
     if (window.confirm('인기있는 학습로그를 업데이트 하시겠습니까?')) {
-      fetch(`${process.env.REACT_APP_API_URL}/studylogs/popular/sync`).catch(
-        (err) => console.log(err)
-      );
+      refetch();
     }
   };
 
   return (
-    <Button variant="contained" onClick={updatePopularStudylogs}>
+    <Button variant="contained" onClick={onClickUpdateButton}>
       인기있는 학습로그 업데이트
     </Button>
   );
