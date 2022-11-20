@@ -1,16 +1,16 @@
 import { Admin, Resource, CustomRoutes } from 'react-admin';
 import jsonServerProvider from 'ra-data-json-server';
-import MissionCreate from './components/react-admin/MissionCreate';
-import SessionCreate from './components/react-admin/SessionCreate';
+import MissionCreate from './reactAdminPages/MissionCreate';
+import SessionCreate from './reactAdminPages/SessionCreate';
 import { Route } from 'react-router-dom';
-import MyLayout from './components/custom/Layout';
+import MyLayout from './Layout';
 import { BASE_URL } from './client';
-import Missions from './components/react-admin/Missions';
-import Sessions from './components/react-admin/Sessions';
-import PopularStudylogsUpdate from './components/custom/PopularStudylogsUpdate';
-import Roadmap from './components/custom/Roadmap';
-import TopKeywords from './components/custom/Roadmap/TopKeywords';
-import SubKeywords from './components/custom/Roadmap/SubKeywords';
+import Missions from './reactAdminPages/Missions';
+import Sessions from './reactAdminPages/Sessions';
+import PopularStudylogsUpdate from './customPages/PopularStudylogsUpdatePage';
+import RoadmapSelectSessionPage from './customPages/RoadmapSelectSessionPage';
+import RoadMapSelectTopKeywordPage from './customPages/RoadmapSelectTopKeywordPage';
+import RoadmapSubKeywordsPage from './customPages/RoadmapSubKeywordsPage';
 
 const dataProvider = jsonServerProvider(BASE_URL);
 
@@ -21,11 +21,14 @@ function App() {
       <Resource name="sessions" list={Sessions} create={SessionCreate} />
       <CustomRoutes>
         <Route path="/studylogs" element={<PopularStudylogsUpdate />} />
-        <Route path="/roadmap" element={<Roadmap />} />
-        <Route path="/roadmap/:sessionId" element={<TopKeywords />} />
+        <Route path="/roadmap" element={<RoadmapSelectSessionPage />} />
+        <Route
+          path="/roadmap/:sessionId"
+          element={<RoadMapSelectTopKeywordPage />}
+        />
         <Route
           path="/roadmap/:sessionId/:keywordId"
-          element={<SubKeywords />}
+          element={<RoadmapSubKeywordsPage />}
         />
       </CustomRoutes>
     </Admin>

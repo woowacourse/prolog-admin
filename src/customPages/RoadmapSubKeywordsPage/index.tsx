@@ -1,9 +1,8 @@
-import { useGetChildrenKeywordList } from '../../../hooks/roadmap';
+import { useGetChildrenKeywordList } from '../../hooks/roadmap';
 import { useNavigate, useParams } from 'react-router-dom';
-import KeywordList from '../../common/TopKeywordList';
+import KeywordList from '../RoadmapSelectTopKeywordPage/components/TopKeywordList';
 
-const SubKeywords = () => {
-  const navigate = useNavigate();
+const RoadmapSubKeywordsPage = () => {
   const { sessionId, keywordId } = useParams();
   const {childrenKeywordList}= useGetChildrenKeywordList({
     sessionId: Number(sessionId),
@@ -28,4 +27,4 @@ const SubKeywords = () => {
   );
 };
 
-export default SubKeywords;
+export default RoadmapSubKeywordsPage;

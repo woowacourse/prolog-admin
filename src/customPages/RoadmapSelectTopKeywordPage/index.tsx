@@ -1,8 +1,8 @@
-import { useGetTopKeywordList } from '../../../hooks/roadmap';
+import { useGetTopKeywordList } from '../../hooks/roadmap';
 import { useNavigate, useParams } from 'react-router-dom';
-import TopKeywordList from '../../common/TopKeywordList';
+import TopKeywordList from './components/TopKeywordList';
 
-const TopKeywords = () => {
+const RoadMapSelectTopKeywordPage = () => {
   const navigate = useNavigate();
   const { sessionId } = useParams();
   const { topKeywordList } = useGetTopKeywordList(Number(sessionId));
@@ -25,4 +25,4 @@ const TopKeywords = () => {
   );
 };
 
-export default TopKeywords;
+export default RoadMapSelectTopKeywordPage;

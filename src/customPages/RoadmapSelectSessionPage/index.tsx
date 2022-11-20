@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom';
-import { useGetSessions } from '../../../hooks/roadmap';
-import MuiList from '../../common/MuiList';
+import { useGetSessions } from '../../hooks/roadmap';
+import SessionList from './components/SessionList';
 
-const RoadmapSessions = () => {
+const RoadmapSelectSessionPage = () => {
   const { sessions } = useGetSessions();
   const navigate = useNavigate();
 
@@ -13,7 +13,7 @@ const RoadmapSessions = () => {
   return (
     <div>
       <h2>세션 선택</h2>
-      <MuiList
+      <SessionList
         rows={sessions}
         onClickMove={(sessionId: number) => {
           navigate(`/roadmap/${sessionId}`);
@@ -22,4 +22,4 @@ const RoadmapSessions = () => {
     </div>);
 };
 
-export default RoadmapSessions;
+export default RoadmapSelectSessionPage;

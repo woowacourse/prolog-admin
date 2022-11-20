@@ -15,7 +15,7 @@ type ListProps = {
   // onClickDelete;
 };
 
-const MuiList = ({
+const SessionList = ({
   rows,
   onClickMove,
 }: // onClickAdd,
@@ -56,4 +56,4 @@ ListProps) => {
   );
 };
 
-export default MuiList;
+export default SessionList;
