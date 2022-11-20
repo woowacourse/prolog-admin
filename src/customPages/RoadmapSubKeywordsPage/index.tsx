@@ -16,7 +16,7 @@ const RoadmapTopKeywordsPage = () => {
 
   return (
     <div>
-      <h2>최상위 키워드 수정/삭제</h2>
+      <h2>최상위 키워드 수정/편집/삭제</h2>
       <SubKeywordList
         childrenKeywordList={childrenKeywordList}
         sessionId={Number(sessionId)}
