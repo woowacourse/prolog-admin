@@ -69,6 +69,7 @@ export const useGetTopKeywordList = (sessionId: number) => {
   };
 };
 
+// 6-1. [R] 최상위 Keyword의 모든 자식 Keyword 목록 조회(public) 
 export const getChildKeywordList = async ({
   sessionId,
   keywordId,
@@ -100,6 +101,7 @@ export const useGetChildrenKeywordList = ({
   };
 };
 
+// 10. [R] Keyword별 Quiz 목록 조회(public)
 export const getQuizListByKeyword = async ({
   sessionId,
   keywordId,
