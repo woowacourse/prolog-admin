@@ -9,6 +9,8 @@ import Missions from './components/react-admin/Missions';
 import Sessions from './components/react-admin/Sessions';
 import PopularStudylogsUpdate from './components/custom/PopularStudylogsUpdate';
 import Roadmap from './components/custom/Roadmap';
+import TopKeywords from './components/custom/Roadmap/TopKeywords';
+import SubKeywords from './components/custom/Roadmap/SubKeywords';
 
 const dataProvider = jsonServerProvider(BASE_URL);
 
@@ -20,6 +22,11 @@ function App() {
       <CustomRoutes>
         <Route path="/studylogs" element={<PopularStudylogsUpdate />} />
         <Route path="/roadmap" element={<Roadmap />} />
+        <Route path="/roadmap/:sessionId" element={<TopKeywords />} />
+        <Route
+          path="/roadmap/:sessionId/:keywordId"
+          element={<SubKeywords />}
+        />
       </CustomRoutes>
     </Admin>
   );
