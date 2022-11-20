@@ -28,6 +28,8 @@ export const EditKeywordModal = ({
     keywordContents ? keywordContents.description : '',
     validateDescription
   );
+  const isAllValidated =
+    name.isValidated && description.isValidated && importance.isValidated;
 
   return (
     <Modal
@@ -68,6 +70,8 @@ export const EditKeywordModal = ({
               error={!description.isValidated}
               helperText={description.message}
               fullWidth
+              multiline
+              maxRows={4}
             />
           </div>
           <div>
@@ -99,7 +103,7 @@ export const EditKeywordModal = ({
               fullWidth
             />
           </div>
-          <button>수정 완료</button>
+          <button disabled={!isAllValidated}>수정 완료</button>
         </form>
       </Box>
     </Modal>
@@ -111,7 +115,7 @@ export const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 700,
+  width: 400,
   bgcolor: 'background.paper',
   border: '2px solid #646464',
   boxShadow: 24,
