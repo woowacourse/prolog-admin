@@ -19,7 +19,8 @@ const RoadmapSelectSessionPage = () => {
           navigate(`/roadmap/${sessionId}`);
         }}
       />
-    </div>);
+    </div>
+  );
 };
 
 export default RoadmapSelectSessionPage;

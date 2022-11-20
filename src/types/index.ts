@@ -6,8 +6,3 @@ export type ChildrenKeyword = {
   description: string;
   parentKeywordId: number | null;
 };
-
-export type ListProps = {
-  childrenKeywordList: ChildrenKeyword[];
-  sessionId: number;
-};

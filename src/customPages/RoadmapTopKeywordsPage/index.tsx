@@ -1,6 +1,6 @@
 import { useGetChildrenKeywordList } from '../../hooks/roadmap';
 import { useParams } from 'react-router-dom';
-import SubKeywordList from '../components/SubKeywordList';
+import SubKeywordList from '../RoadmapEditKeywordPage/components/SubKeywordList';
 
 const RoadmapTopKeywordsPage = () => {
   const { sessionId, keywordId } = useParams();

@@ -1,5 +1,5 @@
 import { useLocation } from 'react-router-dom';
-import SubKeywordList from '../components/SubKeywordList';
+import SubKeywordList from './components/SubKeywordList';
 
 const RoadmapEditKeywordPage = () => {
   const { state } = useLocation();

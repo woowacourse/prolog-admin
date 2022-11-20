@@ -1,10 +1,4 @@
-import {
-  QueryClient,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from '@tanstack/react-query';
-import { AxiosError, AxiosResponse } from 'axios';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { client } from '../client';
 
 const QUERY_KEY = {

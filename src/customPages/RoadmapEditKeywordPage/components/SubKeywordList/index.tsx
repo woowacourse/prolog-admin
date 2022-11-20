@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   Table,
   TableBody,
@@ -8,15 +9,16 @@ import {
   Paper,
   Button,
 } from '@mui/material';
-
-import { useNavigate } from 'react-router-dom';
-import { useDeleteKeyword } from '../../../hooks/roadmap';
-import { useState } from 'react';
-import { ChildrenKeyword, ListProps } from '../../../types';
-
+import { useDeleteKeyword } from '../../../../hooks/roadmap';
 import { EditKeywordModal } from '../EditKeywordModal';
+import { CustomTableCell } from '../CustomTableCell';
+import { ChildrenKeyword } from '../../../../types';
+import { SubKeywordListProps } from './type';
 
-const SubKeywordList = ({ childrenKeywordList, sessionId }: ListProps) => {
+const SubKeywordList = ({
+  childrenKeywordList,
+  sessionId,
+}: SubKeywordListProps) => {
   const columns = ['버튼', ...Object.keys(childrenKeywordList[0])];
   const { mutate: deleteKeyword } = useDeleteKeyword();
   const handleDeleteButton = ({
@@ -106,45 +108,3 @@ const SubKeywordList = ({ childrenKeywordList, sessionId }: ListProps) => {
 };
 
 export default SubKeywordList;
-
-export const CustomTableCell = ({
-  item,
-  sessionId,
-}: {
-  item: ChildrenKeyword;
-  sessionId: number;
-}) => {
-  const navigate = useNavigate();
-  return (
-    <>
-      {Object.values(item).map((itemValue, index) => {
-        if (Array.isArray(itemValue)) {
-          return (
-            <TableCell key={index} component="th" scope="row">
-              <Button
-                key={itemValue}
-                onClick={() =>
-                  navigate(`/roadmap/${sessionId}/editSubKeywords`, {
-                    state: {
-                      childrenKeywordList: itemValue,
-                      sessionId,
-                      name: item.name,
-                    },
-                  })
-                }
-              >
-                하위 키워드({itemValue.length}개) 목록 보기
-              </Button>
-            </TableCell>
-          );
-        }
-
-        return (
-          <TableCell key={index} component="th" scope="row">
-            {itemValue}
-          </TableCell>
-        );
-      })}
-    </>
-  );
-};

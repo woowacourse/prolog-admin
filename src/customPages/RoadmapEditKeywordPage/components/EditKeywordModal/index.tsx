@@ -1,12 +1,12 @@
 import { Modal, Box, TextField } from '@mui/material';
-import { useEditKeyword } from '../../../hooks/roadmap';
-import useInput from '../../../hooks/useInput';
-import { ChildrenKeyword } from '../../../types';
+import { useEditKeyword } from '../../../../hooks/roadmap';
+import useInput from '../../../../hooks/useInput';
 import {
   validateDescription,
   validateName,
   validateImportance,
-} from '../../../utils/validator';
+} from '../../../../utils/validator';
+import { EditKeywordModalProps } from './type';
 
 export const EditKeywordModal = ({
   open,
@@ -14,13 +14,7 @@ export const EditKeywordModal = ({
   keywordContents,
   sessionId,
   keywordId,
-}: {
-  open: boolean;
-  onClose: () => void;
-  keywordContents: ChildrenKeyword;
-  sessionId: number;
-  keywordId: number;
-}) => {
+}: EditKeywordModalProps) => {
   const name = useInput(
     keywordContents ? keywordContents.name : '',
     validateName
@@ -49,12 +43,7 @@ export const EditKeywordModal = ({
         <form
           onSubmit={(event) => {
             event.preventDefault();
-            console.log(
-              '수정완료',
-              name.value,
-              description.value,
-              importance.value
-            );
+
             if (name.value && importance.value && description.value) {
               editKeyword({
                 sessionId,

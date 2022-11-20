@@ -6,22 +6,9 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
+import { TopKeywordListProps } from './type';
 
-
-type ListProps = {
-  rows: { keywordId: number }[];
-  onClickMove: (keywordId: number) => void;
-  // onClickEdit;
-  // onClickDelete;
-};
-
-const TopKeywordList = ({
-  rows,
-  onClickMove,
-}: // onClickAdd,
-// onClickEdit,
-// onClickDelete,
-ListProps) => {
+const TopKeywordList = ({ rows, onClickMove }: TopKeywordListProps) => {
   const columns = Object.keys(rows[0]);
 
   return (
@@ -45,7 +32,10 @@ ListProps) => {
                   {value}
                 </TableCell>
               ))}
-              <TableCell onClick={() => onClickMove(row.keywordId)} align="right">
+              <TableCell
+                onClick={() => onClickMove(row.keywordId)}
+                align="right"
+              >
                 <Button>이동</Button>
               </TableCell>
             </TableRow>
