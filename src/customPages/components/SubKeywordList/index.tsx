@@ -1,19 +1,20 @@
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import Button from '@mui/material/Button';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Button,
+} from '@mui/material';
 
 import { useNavigate } from 'react-router-dom';
 import { useDeleteKeyword } from '../../../hooks/roadmap';
+import { useState } from 'react';
+import { ChildrenKeyword, ListProps } from '../../../types';
 
-type ListProps = {
-  childrenKeywordList: { keywordId: number; name: string }[];
-  sessionId: number;
-};
+import { EditKeywordModal } from '../EditKeywordModal';
 
 const SubKeywordList = ({ childrenKeywordList, sessionId }: ListProps) => {
   const columns = ['버튼', ...Object.keys(childrenKeywordList[0])];
@@ -32,42 +33,66 @@ const SubKeywordList = ({ childrenKeywordList, sessionId }: ListProps) => {
     }
   };
 
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const [keywordContents, setKeywordContents] = useState<ChildrenKeyword>();
+
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead sx={{ backgroundColor: '#bfd4ee' }}>
-          <TableRow>
-            {columns.map((column) => (
-              <TableCell key={column}>{column}</TableCell>
-            ))}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {childrenKeywordList.map((item) => (
-            <TableRow
-              key={item.keywordId}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell align="left">
-                <Button>수정</Button>
-                <Button
-                  onClick={() =>
-                    handleDeleteButton({
-                      sessionId,
-                      keywordId: item.keywordId,
-                      name: item.name,
-                    })
-                  }
-                >
-                  삭제
-                </Button>
-              </TableCell>
-              <CustomTableCell item={item} sessionId={sessionId} />
+    <>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead sx={{ backgroundColor: '#bfd4ee' }}>
+            <TableRow>
+              {columns.map((column) => (
+                <TableCell key={column}>{column}</TableCell>
+              ))}
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {childrenKeywordList.map((item) => (
+              <TableRow
+                key={item.keywordId}
+                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              >
+                <TableCell align="left">
+                  <Button
+                    onClick={() => {
+                      setKeywordContents(item);
+                      handleOpen();
+                    }}
+                  >
+                    수정
+                  </Button>
+                  <Button
+                    onClick={() =>
+                      handleDeleteButton({
+                        sessionId,
+                        keywordId: item.keywordId,
+                        name: item.name,
+                      })
+                    }
+                  >
+                    삭제
+                  </Button>
+                </TableCell>
+                <CustomTableCell item={item} sessionId={sessionId} />
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <EditKeywordModal
+        open={open}
+        onClose={handleClose}
+        keywordContents={keywordContents}
+      />
+    </>
   );
 };
 
@@ -77,7 +102,7 @@ export const CustomTableCell = ({
   item,
   sessionId,
 }: {
-  item: { keywordId: number; name: string };
+  item: ChildrenKeyword;
   sessionId: number;
 }) => {
   const navigate = useNavigate();
