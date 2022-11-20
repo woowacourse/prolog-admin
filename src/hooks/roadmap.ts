@@ -1,4 +1,5 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { AxiosError, AxiosResponse } from 'axios';
 import { client } from '../client';
 
 const QUERY_KEY = {
@@ -7,6 +8,7 @@ const QUERY_KEY = {
   topKeywordList: 'topKeywordList',
   childKeywordList: 'childKeywordList',
   quizListByKeyword: 'quizListByKeyword',
+  deleteKeyword: 'deleteKeyword',
 };
 
 export const getSessions = async () => {
@@ -50,7 +52,7 @@ export const useGetKeyword = ({
   };
 };
 
-// 5번 세션별 Keyword 목록 조회
+// 5. 세션별 Keyword 목록 조회
 export const getTopKeywordList = async (sessionId: number) => {
   const response = await client.get<KeywordListResponse>(
     `/sessions/${sessionId}/keywords`
@@ -69,7 +71,7 @@ export const useGetTopKeywordList = (sessionId: number) => {
   };
 };
 
-// 6-1. [R] 최상위 Keyword의 모든 자식 Keyword 목록 조회(public) 
+// 6-1. [R] 최상위 Keyword의 모든 자식 Keyword 목록 조회(public)
 export const getChildKeywordList = async ({
   sessionId,
   keywordId,
@@ -84,10 +86,7 @@ export const getChildKeywordList = async ({
 export const useGetChildrenKeywordList = ({
   sessionId,
   keywordId,
-}: {
-  sessionId: number;
-  keywordId: number;
-}) => {
+}: ChildKeywordListRequest) => {
   const { data, refetch } = useQuery([QUERY_KEY.childKeywordList], () =>
     getChildKeywordList({
       sessionId,
@@ -116,10 +115,7 @@ export const getQuizListByKeyword = async ({
 export const useGetQuizListByKeyword = ({
   sessionId,
   keywordId,
-}: {
-  sessionId: number;
-  keywordId: number;
-}) => {
+}: QuizListByKeywordRequest) => {
   const { data } = useQuery([QUERY_KEY.quizListByKeyword], () =>
     getQuizListByKeyword({
       sessionId,
@@ -132,9 +128,27 @@ export const useGetQuizListByKeyword = ({
   };
 };
 
+// 2. [D] Keyword 삭제(admin)
+export const deleteKeyword = ({ sessionId, keywordId }: DeleteKeywordRequest) =>
+  client.delete(`/sessions/${sessionId}/keywords/${keywordId}`);
+
+export const useDeleteKeyword = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    ({ sessionId, keywordId }: DeleteKeywordRequest) =>
+      deleteKeyword({ sessionId, keywordId }),
+    {
+      onSuccess() {
+        queryClient.invalidateQueries([QUERY_KEY.childKeywordList]);
+      },
+    }
+  );
+};
+
+/////////////////////////////////////
 // 타입
 // Request
-
 export interface Session {
   id: number;
   name: string;
@@ -148,6 +162,7 @@ type SessionAndKeywordId = {
 export type KeywordRequest = SessionAndKeywordId;
 export type ChildKeywordListRequest = SessionAndKeywordId;
 export type QuizListByKeywordRequest = SessionAndKeywordId;
+export type DeleteKeywordRequest = SessionAndKeywordId;
 
 // Response
 

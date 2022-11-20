@@ -10,7 +10,8 @@ import Sessions from './reactAdminPages/Sessions';
 import PopularStudylogsUpdate from './customPages/PopularStudylogsUpdatePage';
 import RoadmapSelectSessionPage from './customPages/RoadmapSelectSessionPage';
 import RoadMapSelectTopKeywordPage from './customPages/RoadmapSelectTopKeywordPage';
-import RoadmapSubKeywordsPage from './customPages/RoadmapSubKeywordsPage';
+import RoadmapTopKeywordsPage from './customPages/RoadmapTopKeywordsPage';
+import RoadmapEditKeywordPage from './customPages/RoadmapEditKeywordPage';
 
 const dataProvider = jsonServerProvider(BASE_URL);
 
@@ -28,7 +29,11 @@ function App() {
         />
         <Route
           path="/roadmap/:sessionId/:keywordId"
-          element={<RoadmapSubKeywordsPage />}
+          element={<RoadmapTopKeywordsPage />}
+        />
+        <Route
+          path="/roadmap/:sessionId/editSubKeywords"
+          element={<RoadmapEditKeywordPage />}
         />
       </CustomRoutes>
     </Admin>
