@@ -2,6 +2,7 @@ import { Menu } from 'react-admin';
 import LabelIcon from '@mui/icons-material/Label';
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import WysiwygIcon from '@mui/icons-material/Wysiwyg';
+import EditRoadIcon from '@mui/icons-material/EditRoad';
 
 const MyMenu = (props: any) => (
   <Menu {...props}>
@@ -15,6 +16,11 @@ const MyMenu = (props: any) => (
       to="/studylogs"
       primaryText="인기있는 학습로그"
       leftIcon={<LabelIcon />}
+    />
+    <Menu.Item
+      to="/roadmap"
+      primaryText="로드맵"
+      leftIcon={<EditRoadIcon />}
     />
   </Menu>
 );

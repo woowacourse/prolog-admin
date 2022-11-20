@@ -5,6 +5,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import Button from '@mui/material/Button';
+
 
 type ListProps = {
   rows: { id: number }[];
@@ -44,7 +46,7 @@ ListProps) => {
                 </TableCell>
               ))}
               <TableCell onClick={() => onClickMove(row.id)} align="right">
-                이동
+                <Button>이동</Button>
               </TableCell>
             </TableRow>
           ))}
