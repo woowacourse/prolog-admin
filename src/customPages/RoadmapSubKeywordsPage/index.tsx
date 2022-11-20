@@ -1,6 +1,6 @@
 import { useGetChildrenKeywordList } from '../../hooks/roadmap';
-import { useNavigate, useParams } from 'react-router-dom';
-import KeywordList from '../RoadmapSelectTopKeywordPage/components/TopKeywordList';
+import { useParams } from 'react-router-dom';
+import SubKeywordList from './components/SubKeywordList';
 
 const RoadmapSubKeywordsPage = () => {
   const { sessionId, keywordId } = useParams();
@@ -16,13 +16,10 @@ const RoadmapSubKeywordsPage = () => {
 
   return (
     <div>
-      <h2>키워드 선택</h2>
-      {/* <KeywordList
-        rows={childrenKeywordList}
-        onClickMove={(keywordId: number) => {
-          // navigate(`/roadmap/${sessionId}/${keywordId}`);
-        }}
-      /> */}
+      <h2>키워드 수정/편집/삭제</h2>
+      <SubKeywordList
+        childrenKeywordList={childrenKeywordList}
+      />
     </div>
   );
 };

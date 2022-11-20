@@ -14,7 +14,7 @@ const RoadMapSelectTopKeywordPage = () => {
 
   return (
     <div>
-      <h2>키워드 선택</h2>
+      <h2>수정할 최상위 키워드 중 선택</h2>
       <TopKeywordList
         rows={topKeywordList}
         onClickMove={(keywordId: number) => {
