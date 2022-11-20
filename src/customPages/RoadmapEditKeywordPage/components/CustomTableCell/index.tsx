@@ -18,6 +18,7 @@ export const CustomTableCell = ({
             <TableCell key={index} component="th" scope="row">
               <Button
                 key={itemValue}
+                variant="contained"
                 onClick={() =>
                   navigate(`/roadmap/${sessionId}/editSubKeywords`, {
                     state: {

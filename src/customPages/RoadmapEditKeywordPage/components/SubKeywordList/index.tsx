@@ -8,6 +8,7 @@ import {
   TableRow,
   Paper,
   Button,
+  Stack,
 } from '@mui/material';
 import { useDeleteKeyword } from '../../../../hooks/roadmap';
 import { EditKeywordModal } from '../EditKeywordModal';
@@ -19,7 +20,17 @@ const SubKeywordList = ({
   childrenKeywordList,
   sessionId,
 }: SubKeywordListProps) => {
-  const columns = ['버튼', ...Object.keys(childrenKeywordList[0])];
+  const columns = [
+    '편집버튼',
+    'Id',
+    '이름',
+    '설명',
+    '순서',
+    '중요도',
+    '상위키워드Id',
+    '하위키워드',
+  ];
+
   const { mutate: deleteKeyword } = useDeleteKeyword();
   const handleDeleteButton = ({
     sessionId,
@@ -70,25 +81,32 @@ const SubKeywordList = ({
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
                 <TableCell align="left">
-                  <Button
-                    onClick={() => {
-                      setKeywordContents(item);
-                      handleOpen();
-                    }}
-                  >
-                    수정
-                  </Button>
-                  <Button
-                    onClick={() =>
-                      handleDeleteButton({
-                        sessionId,
-                        keywordId: item.keywordId,
-                        name: item.name,
-                      })
-                    }
-                  >
-                    삭제
-                  </Button>
+                  <Stack spacing={1}>
+                    <Button
+                      variant="outlined"
+                      color="success"
+                      onClick={() => {
+                        setKeywordContents(item);
+                        handleOpen();
+                      }}
+                    >
+                      수정
+                    </Button>
+
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      onClick={() =>
+                        handleDeleteButton({
+                          sessionId,
+                          keywordId: item.keywordId,
+                          name: item.name,
+                        })
+                      }
+                    >
+                      삭제
+                    </Button>
+                  </Stack>
                 </TableCell>
                 <CustomTableCell item={item} sessionId={sessionId} />
               </TableRow>

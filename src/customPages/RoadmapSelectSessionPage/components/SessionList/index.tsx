@@ -11,7 +11,7 @@ import {
 import { SessionListProps } from './type';
 
 const SessionList = ({ rows, onClickMove }: SessionListProps) => {
-  const columns = Object.keys(rows[0]);
+  const columns = ['Id', '이름'];
 
   return (
     <TableContainer component={Paper}>
@@ -35,7 +35,7 @@ const SessionList = ({ rows, onClickMove }: SessionListProps) => {
                 </TableCell>
               ))}
               <TableCell onClick={() => onClickMove(row.id)} align="right">
-                <Button>이동</Button>
+                <Button variant="contained">선택</Button>
               </TableCell>
             </TableRow>
           ))}

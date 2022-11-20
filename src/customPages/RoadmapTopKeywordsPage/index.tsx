@@ -31,7 +31,13 @@ const RoadmapTopKeywordsPage = () => {
         sessionId={Number(sessionId)}
       />
       <br />
-      <Button onClick={handleOpen} variant="contained" fullWidth size="large">
+      <Button
+        onClick={handleOpen}
+        variant="contained"
+        fullWidth
+        size="large"
+        color="success"
+      >
         해당 최상위 키워드 하위에 새 키워드 추가
       </Button>
       <AddKeywordModal

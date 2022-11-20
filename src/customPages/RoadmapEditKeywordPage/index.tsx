@@ -22,7 +22,13 @@ const RoadmapEditKeywordPage = () => {
         sessionId={state.sessionId}
       />
       <br />
-      <Button onClick={handleOpen} variant="contained" fullWidth size="large">
+      <Button
+        onClick={handleOpen}
+        variant="contained"
+        fullWidth
+        size="large"
+        color="success"
+      >
         [{state.name}] 하위에 새 키워드 추가
       </Button>
       <AddKeywordModal

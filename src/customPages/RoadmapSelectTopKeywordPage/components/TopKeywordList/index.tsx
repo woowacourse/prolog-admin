@@ -11,7 +11,7 @@ import {
 import { TopKeywordListProps } from './type';
 
 const TopKeywordList = ({ rows, onClickMove }: TopKeywordListProps) => {
-  const columns = Object.keys(rows[0]);
+  const columns = ['Id', '이름', '설명', '순서', '중요도'];
 
   return (
     <TableContainer component={Paper}>
@@ -38,7 +38,7 @@ const TopKeywordList = ({ rows, onClickMove }: TopKeywordListProps) => {
                 onClick={() => onClickMove(row.keywordId)}
                 align="right"
               >
-                <Button>이동</Button>
+                <Button variant="contained">선택</Button>
               </TableCell>
             </TableRow>
           ))}
