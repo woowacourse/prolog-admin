@@ -1,7 +1,11 @@
 import { Modal, Box, TextField } from '@mui/material';
 import useInput from '../../../hooks/useInput';
 import { ChildrenKeyword } from '../../../types';
-import { validateName } from '../../../utils/validator';
+import {
+  validateDescription,
+  validateName,
+  validateImportance,
+} from '../../../utils/validator';
 
 export const EditKeywordModal = ({
   open,
@@ -10,18 +14,19 @@ export const EditKeywordModal = ({
 }: {
   open: boolean;
   onClose: () => void;
-  keywordContents?: ChildrenKeyword;
+  keywordContents: ChildrenKeyword;
 }) => {
   const name = useInput(
     keywordContents ? keywordContents.name : '',
     validateName
   );
-  const order = useInput(keywordContents ? String(keywordContents.order) : '');
   const importance = useInput(
-    keywordContents ? String(keywordContents.importance) : ''
+    keywordContents ? String(keywordContents.importance) : '',
+    validateImportance
   );
   const description = useInput(
-    keywordContents ? keywordContents.description : ''
+    keywordContents ? keywordContents.description : '',
+    validateDescription
   );
 
   return (
@@ -35,7 +40,12 @@ export const EditKeywordModal = ({
         <form
           onSubmit={(event) => {
             event.preventDefault();
-            console.log('수정완료', name.value, order.value);
+            console.log(
+              '수정완료',
+              name.value,
+              description.value,
+              importance.value
+            );
           }}
         >
           <div>
@@ -63,17 +73,6 @@ export const EditKeywordModal = ({
           <div>
             <TextField
               required
-              label="순서"
-              onChange={order.onChange}
-              value={order.value}
-              error={!order.isValidated}
-              helperText={order.message}
-              fullWidth
-            />
-          </div>
-          <div>
-            <TextField
-              required
               label="중요도"
               onChange={importance.onChange}
               value={importance.value}
@@ -82,7 +81,24 @@ export const EditKeywordModal = ({
               fullWidth
             />
           </div>
-
+          <div>
+            <TextField
+              required
+              disabled
+              label="순서"
+              defaultValue={keywordContents.order}
+              fullWidth
+            />
+          </div>
+          <div>
+            <TextField
+              required
+              disabled
+              label="상위 키워드 Id"
+              defaultValue={keywordContents.parentKeywordId}
+              fullWidth
+            />
+          </div>
           <button>수정 완료</button>
         </form>
       </Box>

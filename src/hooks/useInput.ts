@@ -3,7 +3,7 @@ import { ChangeEvent } from 'react';
 import { ValidatorFunction } from '../utils/validator';
 
 const useInput = (
-  initialValue: string,
+  initialValue?: string,
   validator?: ValidatorFunction,
   optionalValue?: string
 ) => {

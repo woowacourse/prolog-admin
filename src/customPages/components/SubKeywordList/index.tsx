@@ -41,7 +41,14 @@ const SubKeywordList = ({ childrenKeywordList, sessionId }: ListProps) => {
     setOpen(false);
   };
 
-  const [keywordContents, setKeywordContents] = useState<ChildrenKeyword>();
+  const [keywordContents, setKeywordContents] = useState<ChildrenKeyword>({
+    keywordId: 0,
+    name: '',
+    order: 0,
+    importance: 0,
+    description: '',
+    parentKeywordId: null,
+  });
 
   return (
     <>
