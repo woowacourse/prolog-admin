@@ -56,3 +56,19 @@ export const validateImportance: ValidatorFunction = (inputValue: string) => {
   }
   return { isValidated: true, message: '올바른 입력입니다.' };
 };
+
+const checkOrder = (inputValue: string) => {
+  const inputNumber = Number(inputValue);
+
+  return Number.isNaN(inputNumber) === true;
+};
+
+export const validateOrder: ValidatorFunction = (inputValue: string) => {
+  if (checkOrder(inputValue)) {
+    return {
+      isValidated: false,
+      message: '키워드 순서에는 숫자만 입력해주세요.',
+    };
+  }
+  return { isValidated: true, message: '올바른 입력입니다.' };
+};

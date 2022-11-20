@@ -1,6 +1,9 @@
 import { useGetChildrenKeywordList } from '../../hooks/roadmap';
 import { useParams } from 'react-router-dom';
 import SubKeywordList from '../RoadmapEditKeywordPage/components/SubKeywordList';
+import { Button } from '@mui/material';
+import { useState } from 'react';
+import { AddKeywordModal } from '../RoadmapEditKeywordPage/components/AddKeywordModal';
 
 const RoadmapTopKeywordsPage = () => {
   const { sessionId, keywordId } = useParams();
@@ -8,8 +11,14 @@ const RoadmapTopKeywordsPage = () => {
     sessionId: Number(sessionId),
     keywordId: Number(keywordId),
   });
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
 
-  console.log(childrenKeywordList);
   if (typeof childrenKeywordList === 'undefined') {
     return <h3>선택하신 최상위 키워드에 콘텐츠가 존재하지 않습니다.</h3>;
   }
@@ -20,6 +29,16 @@ const RoadmapTopKeywordsPage = () => {
       <SubKeywordList
         childrenKeywordList={childrenKeywordList}
         sessionId={Number(sessionId)}
+      />
+      <br />
+      <Button onClick={handleOpen} variant="contained" fullWidth size="large">
+        해당 최상위 키워드 하위에 새 키워드 추가
+      </Button>
+      <AddKeywordModal
+        open={open}
+        onClose={handleClose}
+        sessionId={Number(sessionId)}
+        parentKeywordId={null}
       />
     </div>
   );

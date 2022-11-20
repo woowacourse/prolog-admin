@@ -198,6 +198,56 @@ export const useEditKeyword = ({
   );
 };
 
+// 1. [C] Keyword 생성(admin)
+export const addKeyword = ({
+  sessionId,
+  name,
+  order,
+  importance,
+  parentKeywordId,
+  description,
+}: AddKeywordRequest) =>
+  client.post(`/sessions/${sessionId}/keywords`, {
+    name,
+    order,
+    importance,
+    parentKeywordId,
+    description,
+  });
+
+export const useAddKeyword = ({
+  successCallback,
+}: {
+  successCallback?: () => void;
+}) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    ({
+      sessionId,
+      name,
+      order,
+      importance,
+      parentKeywordId,
+      description,
+    }: AddKeywordRequest) =>
+      addKeyword({
+        sessionId,
+        name,
+        order,
+        importance,
+        parentKeywordId,
+        description,
+      }),
+    {
+      onSuccess() {
+        queryClient.invalidateQueries([QUERY_KEY.childKeywordList]);
+        successCallback && successCallback();
+      },
+    }
+  );
+};
+
 /////////////////////////////////////
 // 타입
 // Request
@@ -216,6 +266,15 @@ export type ChildKeywordListRequest = SessionAndKeywordId;
 export type QuizListByKeywordRequest = SessionAndKeywordId;
 export type DeleteKeywordRequest = SessionAndKeywordId;
 export type EditKeywordRequest = SessionAndKeywordId & {
+  name: string;
+  order: number;
+  importance: number;
+  parentKeywordId: number | null;
+  description: string;
+};
+
+export type AddKeywordRequest = {
+  sessionId: number;
   name: string;
   order: number;
   importance: number;

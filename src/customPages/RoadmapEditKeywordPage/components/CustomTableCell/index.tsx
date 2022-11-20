@@ -24,6 +24,7 @@ export const CustomTableCell = ({
                       childrenKeywordList: itemValue,
                       sessionId,
                       name: item.name,
+                      parentKeywordId: item.keywordId,
                     },
                   })
                 }
