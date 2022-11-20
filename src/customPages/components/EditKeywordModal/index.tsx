@@ -1,4 +1,5 @@
 import { Modal, Box, TextField } from '@mui/material';
+import { useEditKeyword } from '../../../hooks/roadmap';
 import useInput from '../../../hooks/useInput';
 import { ChildrenKeyword } from '../../../types';
 import {
@@ -11,10 +12,14 @@ export const EditKeywordModal = ({
   open,
   onClose,
   keywordContents,
+  sessionId,
+  keywordId,
 }: {
   open: boolean;
   onClose: () => void;
   keywordContents: ChildrenKeyword;
+  sessionId: number;
+  keywordId: number;
 }) => {
   const name = useInput(
     keywordContents ? keywordContents.name : '',
@@ -30,6 +35,8 @@ export const EditKeywordModal = ({
   );
   const isAllValidated =
     name.isValidated && description.isValidated && importance.isValidated;
+
+  const { mutate: editKeyword } = useEditKeyword({ successCallback: onClose });
 
   return (
     <Modal
@@ -48,6 +55,17 @@ export const EditKeywordModal = ({
               description.value,
               importance.value
             );
+            if (name.value && importance.value && description.value) {
+              editKeyword({
+                sessionId,
+                keywordId,
+                name: name.value,
+                importance: Number(importance.value),
+                description: description.value,
+                order: keywordContents.order,
+                parentKeywordId: keywordContents.parentKeywordId,
+              });
+            }
           }}
         >
           <div>

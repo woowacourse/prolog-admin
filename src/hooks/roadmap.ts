@@ -1,4 +1,9 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  QueryClient,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { AxiosError, AxiosResponse } from 'axios';
 import { client } from '../client';
 
@@ -146,6 +151,59 @@ export const useDeleteKeyword = () => {
   );
 };
 
+// 3. [U] Keyword 수정(admin)
+export const editKeyword = ({
+  sessionId,
+  keywordId,
+  name,
+  order,
+  importance,
+  parentKeywordId,
+  description,
+}: EditKeywordRequest) =>
+  client.put(`/sessions/${sessionId}/keywords/${keywordId}`, {
+    name,
+    order,
+    importance,
+    parentKeywordId,
+    description,
+  });
+
+export const useEditKeyword = ({
+  successCallback,
+}: {
+  successCallback?: () => void;
+}) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    ({
+      sessionId,
+      keywordId,
+      name,
+      order,
+      importance,
+      parentKeywordId,
+      description,
+    }: EditKeywordRequest) =>
+      editKeyword({
+        sessionId,
+        keywordId,
+        name,
+        order,
+        importance,
+        parentKeywordId,
+        description,
+      }),
+    {
+      onSuccess() {
+        queryClient.invalidateQueries([QUERY_KEY.childKeywordList]);
+        successCallback && successCallback();
+      },
+    }
+  );
+};
+
 /////////////////////////////////////
 // 타입
 // Request
@@ -163,6 +221,13 @@ export type KeywordRequest = SessionAndKeywordId;
 export type ChildKeywordListRequest = SessionAndKeywordId;
 export type QuizListByKeywordRequest = SessionAndKeywordId;
 export type DeleteKeywordRequest = SessionAndKeywordId;
+export type EditKeywordRequest = SessionAndKeywordId & {
+  name: string;
+  order: number;
+  importance: number;
+  parentKeywordId: number | null;
+  description: string;
+};
 
 // Response
 

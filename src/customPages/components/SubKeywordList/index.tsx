@@ -98,6 +98,8 @@ const SubKeywordList = ({ childrenKeywordList, sessionId }: ListProps) => {
         open={open}
         onClose={handleClose}
         keywordContents={keywordContents}
+        sessionId={sessionId}
+        keywordId={keywordContents.keywordId}
       />
     </>
   );
