@@ -1,8 +1,7 @@
-import React from 'react';
 import { Button } from '@mui/material';
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
-import { useDataProvider } from 'react-admin';
-import { useQuery } from 'react-query';
+import { useGetMembers } from '../hooks/members';
+import { client } from '../client';
 
 const columns: GridColDef[] = [
   { field: 'id', headerName: 'ID', width: 70 },
@@ -22,9 +21,7 @@ const columns: GridColDef[] = [
       <Button
         variant="outlined"
         onClick={() => {
-          fetch(`/members/${param.row.id}/promote/approve`, {
-            method: 'POST',
-          });
+          client.post(`/members/${param.row.id}/promote/approve`);
         }}
       >
         등업
@@ -34,12 +31,9 @@ const columns: GridColDef[] = [
 ];
 
 const Sessions = () => {
-  const dataProvider = useDataProvider();
-  const { data: users, isLoading } = useQuery('user', () =>
-    dataProvider.getUsers()
-  );
+  const { data: users, isLoading, isError } = useGetMembers();
 
-  if (isLoading) {
+  if (isLoading || isError) {
     return <></>;
   }
 
