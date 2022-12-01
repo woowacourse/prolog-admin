@@ -10,16 +10,18 @@ import {
   Button,
   Stack,
 } from '@mui/material';
-import { useDeleteKeyword } from '../../../../hooks/roadmap';
+import { KeywordResponse, useDeleteKeyword } from '../../../../hooks/roadmap';
 import { EditKeywordModal } from '../EditKeywordModal';
 import { CustomTableCell } from '../CustomTableCell';
 import { ChildrenKeyword } from '../../../../types';
 import { SubKeywordListProps } from './type';
+import { useNavigate } from 'react-router-dom';
 
 const SubKeywordList = ({
   childrenKeywordList,
   sessionId,
 }: SubKeywordListProps) => {
+  const navigate = useNavigate();
   const columns = [
     '편집버튼',
     'Id',
@@ -29,6 +31,7 @@ const SubKeywordList = ({
     '중요도',
     '상위키워드Id',
     '하위키워드',
+    '퀴즈',
   ];
 
   const { mutate: deleteKeyword } = useDeleteKeyword();
@@ -62,6 +65,10 @@ const SubKeywordList = ({
     description: '',
     parentKeywordId: null,
   });
+
+  const handleClickQuizButton = (item: KeywordResponse) => {
+    navigate(`/roadmap/${sessionId}/${item.keywordId}/quizs`, { state: item });
+  };
 
   return (
     <>
@@ -109,6 +116,14 @@ const SubKeywordList = ({
                   </Stack>
                 </TableCell>
                 <CustomTableCell item={item} sessionId={sessionId} />
+                <TableCell>
+                  <Button
+                    variant="contained"
+                    onClick={() => handleClickQuizButton(item)}
+                  >
+                    퀴즈 보기
+                  </Button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

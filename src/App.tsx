@@ -12,6 +12,7 @@ import RoadmapSelectSessionPage from './customPages/RoadmapSelectSessionPage';
 import RoadMapSelectTopKeywordPage from './customPages/RoadmapSelectTopKeywordPage';
 import RoadmapTopKeywordsPage from './customPages/RoadmapTopKeywordsPage';
 import RoadmapEditKeywordPage from './customPages/RoadmapEditKeywordPage';
+import RoadmapQuizsPage from './customPages/RoadmapQuizsPage';
 
 const dataProvider = jsonServerProvider(BASE_URL);
 
@@ -26,6 +27,10 @@ function App() {
         <Route
           path="/roadmap/:sessionId"
           element={<RoadMapSelectTopKeywordPage />}
+        />
+        <Route
+          path="/roadmap/:sessionId/:keywordId/quizs"
+          element={<RoadmapQuizsPage />}
         />
         <Route
           path="/roadmap/:sessionId/:keywordId"
