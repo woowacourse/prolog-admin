@@ -30,6 +30,9 @@ export const KeywordModal = ({
 }: KeywordModalProps) => {
   const sessionId = Number(useParams().sessionId);
 
+  const { mutateAsync: addKeyword } = useAddKeyword();
+  const { mutateAsync: editKeyword } = useEditKeyword();
+
   const name = useInput(prevKeyword?.name ?? '', validateName);
   const importance = useInput(
     String(prevKeyword?.importance ?? ''),
@@ -43,9 +46,6 @@ export const KeywordModal = ({
 
   const isAllValidated =
     name.isValidated && description.isValidated && importance.isValidated;
-
-  const { mutateAsync: addKeyword } = useAddKeyword();
-  const { mutateAsync: editKeyword } = useEditKeyword();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
