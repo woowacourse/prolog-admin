@@ -15,24 +15,18 @@ import { KeywordModal } from '../KeywordModal';
 import { CustomTableCell } from '../CustomTableCell';
 import { SubKeywordListProps } from './type';
 import { useNavigate, useParams } from 'react-router-dom';
+import useModal from '../../../../hooks/useModal';
 
 const SubKeywordList = ({ childrenKeywordList }: SubKeywordListProps) => {
   const sessionId = Number(useParams().sessionId);
   const navigate = useNavigate();
+
   const [editingKeyword, setEditingKeyword] = useState<KeywordResponse>();
-  const columns = [
-    '편집버튼',
-    'Id',
-    '이름',
-    '설명',
-    '순서',
-    '중요도',
-    '상위키워드Id',
-    '하위키워드',
-    '퀴즈',
-  ];
+
+  const { open, openModal, closeModal } = useModal();
 
   const { mutate: deleteKeyword } = useDeleteKeyword();
+
   const handleDeleteButton = ({
     sessionId,
     keywordId,
@@ -47,26 +41,21 @@ const SubKeywordList = ({ childrenKeywordList }: SubKeywordListProps) => {
     }
   };
 
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  // const [keywordContents, setKeywordContents] = useState<ChildrenKeyword>({
-  //   keywordId: 0,
-  //   name: '',
-  //   order: 0,
-  //   importance: 0,
-  //   description: '',
-  //   parentKeywordId: null,
-  // });
-
   const handleClickQuizButton = (item: KeywordResponse) => {
     navigate(`/roadmap/${sessionId}/${item.keywordId}/quizs`, { state: item });
   };
+
+  const columns = [
+    '편집버튼',
+    'Id',
+    '이름',
+    '설명',
+    '순서',
+    '중요도',
+    '상위키워드Id',
+    '하위키워드',
+    '퀴즈',
+  ];
 
   return (
     <>
@@ -92,7 +81,7 @@ const SubKeywordList = ({ childrenKeywordList }: SubKeywordListProps) => {
                       color="success"
                       onClick={() => {
                         setEditingKeyword(item);
-                        handleOpen();
+                        openModal();
                       }}
                     >
                       수정
@@ -129,7 +118,7 @@ const SubKeywordList = ({ childrenKeywordList }: SubKeywordListProps) => {
       </TableContainer>
       <KeywordModal
         open={open}
-        onClose={handleClose}
+        onClose={closeModal}
         prevKeyword={editingKeyword}
       />
     </>
