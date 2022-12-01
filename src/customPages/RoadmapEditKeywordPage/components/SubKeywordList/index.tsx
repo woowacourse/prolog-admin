@@ -13,15 +13,13 @@ import {
 import { KeywordResponse, useDeleteKeyword } from '../../../../hooks/roadmap';
 import { EditKeywordModal } from '../EditKeywordModal';
 import { CustomTableCell } from '../CustomTableCell';
-import { ChildrenKeyword } from '../../../../types';
 import { SubKeywordListProps } from './type';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-const SubKeywordList = ({
-  childrenKeywordList,
-  sessionId,
-}: SubKeywordListProps) => {
+const SubKeywordList = ({ childrenKeywordList }: SubKeywordListProps) => {
+  const sessionId = Number(useParams().sessionId);
   const navigate = useNavigate();
+  const [editingKeyword, setEditingKeyword] = useState<KeywordResponse>();
   const columns = [
     '편집버튼',
     'Id',
@@ -57,14 +55,14 @@ const SubKeywordList = ({
     setOpen(false);
   };
 
-  const [keywordContents, setKeywordContents] = useState<ChildrenKeyword>({
-    keywordId: 0,
-    name: '',
-    order: 0,
-    importance: 0,
-    description: '',
-    parentKeywordId: null,
-  });
+  // const [keywordContents, setKeywordContents] = useState<ChildrenKeyword>({
+  //   keywordId: 0,
+  //   name: '',
+  //   order: 0,
+  //   importance: 0,
+  //   description: '',
+  //   parentKeywordId: null,
+  // });
 
   const handleClickQuizButton = (item: KeywordResponse) => {
     navigate(`/roadmap/${sessionId}/${item.keywordId}/quizs`, { state: item });
@@ -93,7 +91,7 @@ const SubKeywordList = ({
                       variant="outlined"
                       color="success"
                       onClick={() => {
-                        setKeywordContents(item);
+                        setEditingKeyword(item);
                         handleOpen();
                       }}
                     >
@@ -132,9 +130,7 @@ const SubKeywordList = ({
       <EditKeywordModal
         open={open}
         onClose={handleClose}
-        keywordContents={keywordContents}
-        sessionId={sessionId}
-        keywordId={keywordContents.keywordId}
+        prevKeyword={editingKeyword}
       />
     </>
   );

@@ -1,5 +1,6 @@
 import { Modal, TextField } from '@mui/material';
 import { FormEvent } from 'react';
+import { useParams } from 'react-router-dom';
 import { useEditKeyword } from '../../../../hooks/roadmap';
 import useInput from '../../../../hooks/useInput';
 import {
@@ -13,22 +14,20 @@ import { EditKeywordModalProps } from './type';
 export const EditKeywordModal = ({
   open,
   onClose,
-  keywordContents,
-  sessionId,
-  keywordId,
+  prevKeyword,
 }: EditKeywordModalProps) => {
-  const name = useInput(
-    keywordContents ? keywordContents.name : '',
-    validateName
-  );
+  const { sessionId, keywordId } = useParams();
+
+  const name = useInput(prevKeyword?.name ?? '', validateName);
   const importance = useInput(
-    keywordContents ? String(keywordContents.importance) : '',
+    String(prevKeyword?.importance) ?? '',
     validateImportance
   );
   const description = useInput(
-    keywordContents ? keywordContents.description : '',
+    prevKeyword?.description ?? '',
     validateDescription
   );
+
   const isAllValidated =
     name.isValidated && description.isValidated && importance.isValidated;
 
@@ -37,15 +36,19 @@ export const EditKeywordModal = ({
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (!prevKeyword) {
+      return;
+    }
+
     if (name.value && importance.value && description.value) {
       await editKeyword({
-        sessionId,
-        keywordId,
+        sessionId: Number(sessionId),
+        keywordId: Number(keywordId),
         name: name.value,
         importance: Number(importance.value),
         description: description.value,
-        order: keywordContents.order,
-        parentKeywordId: keywordContents.parentKeywordId,
+        order: prevKeyword.order,
+        parentKeywordId: prevKeyword.parentKeywordId,
       });
       onClose();
     }
@@ -100,7 +103,7 @@ export const EditKeywordModal = ({
               required
               disabled
               label="순서"
-              defaultValue={keywordContents.order}
+              defaultValue={prevKeyword?.order}
               fullWidth
             />
           </div>
@@ -109,7 +112,7 @@ export const EditKeywordModal = ({
               required
               disabled
               label="상위 키워드 Id"
-              defaultValue={keywordContents.parentKeywordId}
+              defaultValue={prevKeyword?.parentKeywordId}
               fullWidth
             />
           </div>

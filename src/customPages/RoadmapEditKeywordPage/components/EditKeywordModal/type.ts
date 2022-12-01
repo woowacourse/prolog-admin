@@ -1,9 +1,7 @@
-import { ChildrenKeyword } from '../../../../types';
+import { KeywordResponse } from '../../../../hooks/roadmap';
 
 export type EditKeywordModalProps = {
   open: boolean;
   onClose: () => void;
-  keywordContents: ChildrenKeyword;
-  sessionId: number;
-  keywordId: number;
+  prevKeyword?: KeywordResponse;
 };
