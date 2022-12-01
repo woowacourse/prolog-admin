@@ -1,6 +1,6 @@
-import { ChildrenKeyword } from '../../../../types';
+import { KeywordResponse } from '../../../../hooks/roadmap';
 
 export type SubKeywordListProps = {
-  childrenKeywordList: ChildrenKeyword[];
+  childrenKeywordList: KeywordResponse[];
   sessionId: number;
 };

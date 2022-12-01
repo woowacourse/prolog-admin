@@ -1,15 +1,16 @@
 import { TableCell, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { ChildrenKeyword } from '../../../../types';
+import { KeywordResponse } from '../../../../hooks/roadmap';
 
 export const CustomTableCell = ({
   item,
   sessionId,
 }: {
-  item: ChildrenKeyword;
+  item: KeywordResponse;
   sessionId: number;
 }) => {
   const navigate = useNavigate();
+
   return (
     <>
       {Object.values(item).map((itemValue, index) => {
@@ -17,7 +18,6 @@ export const CustomTableCell = ({
           return (
             <TableCell key={index} component="th" scope="row">
               <Button
-                key={itemValue}
                 variant="contained"
                 onClick={() =>
                   navigate(`/roadmap/${sessionId}/editSubKeywords`, {
