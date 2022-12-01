@@ -11,7 +11,7 @@ import {
   Stack,
 } from '@mui/material';
 import { KeywordResponse, useDeleteKeyword } from '../../../../hooks/roadmap';
-import { EditKeywordModal } from '../EditKeywordModal';
+import { KeywordModal } from '../KeywordModal';
 import { CustomTableCell } from '../CustomTableCell';
 import { SubKeywordListProps } from './type';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -127,7 +127,7 @@ const SubKeywordList = ({ childrenKeywordList }: SubKeywordListProps) => {
           </TableBody>
         </Table>
       </TableContainer>
-      <EditKeywordModal
+      <KeywordModal
         open={open}
         onClose={handleClose}
         prevKeyword={editingKeyword}

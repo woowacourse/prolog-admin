@@ -1,55 +1,78 @@
 import { Modal, TextField } from '@mui/material';
 import { FormEvent } from 'react';
 import { useParams } from 'react-router-dom';
-import { useEditKeyword } from '../../../../hooks/roadmap';
+import {
+  KeywordResponse,
+  useAddKeyword,
+  useEditKeyword,
+} from '../../../../hooks/roadmap';
 import useInput from '../../../../hooks/useInput';
 import {
   validateDescription,
   validateName,
   validateImportance,
+  validateOrder,
 } from '../../../../utils/validator';
 import CenterBox from '../../../common/CenterBox';
-import { EditKeywordModalProps } from './type';
 
-export const EditKeywordModal = ({
+export type KeywordModalProps = {
+  open: boolean;
+  onClose: () => void;
+  prevKeyword?: KeywordResponse;
+  parentKeywordId?: number | null;
+};
+
+export const KeywordModal = ({
   open,
   onClose,
   prevKeyword,
-}: EditKeywordModalProps) => {
-  const { sessionId, keywordId } = useParams();
+  parentKeywordId,
+}: KeywordModalProps) => {
+  const sessionId = Number(useParams().sessionId);
 
   const name = useInput(prevKeyword?.name ?? '', validateName);
   const importance = useInput(
-    String(prevKeyword?.importance) ?? '',
+    String(prevKeyword?.importance ?? ''),
     validateImportance
   );
   const description = useInput(
     prevKeyword?.description ?? '',
     validateDescription
   );
+  const order = useInput('', validateOrder);
 
   const isAllValidated =
     name.isValidated && description.isValidated && importance.isValidated;
 
+  const { mutateAsync: addKeyword } = useAddKeyword();
   const { mutateAsync: editKeyword } = useEditKeyword();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!prevKeyword) {
-      return;
-    }
-
     if (name.value && importance.value && description.value) {
-      await editKeyword({
-        sessionId: Number(sessionId),
-        keywordId: Number(keywordId),
-        name: name.value,
-        importance: Number(importance.value),
-        description: description.value,
-        order: prevKeyword.order,
-        parentKeywordId: prevKeyword.parentKeywordId,
-      });
+      if (prevKeyword) {
+        await editKeyword({
+          sessionId,
+          keywordId: prevKeyword.keywordId,
+          name: name.value,
+          importance: Number(importance.value),
+          description: description.value,
+          order: prevKeyword.order,
+          parentKeywordId: prevKeyword.parentKeywordId,
+        });
+      }
+
+      if (parentKeywordId !== undefined) {
+        await addKeyword({
+          sessionId,
+          name: name.value,
+          importance: Number(importance.value),
+          description: description.value,
+          order: Number(order.value),
+          parentKeywordId,
+        });
+      }
       onClose();
     }
   };
@@ -116,7 +139,9 @@ export const EditKeywordModal = ({
               fullWidth
             />
           </div>
-          <button disabled={!isAllValidated}>수정 완료</button>
+          <button disabled={!isAllValidated}>
+            {prevKeyword ? '수정 완료' : '키워드 추가'}
+          </button>
         </form>
       </CenterBox>
     </Modal>

@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import SubKeywordList from '../RoadmapEditKeywordPage/components/SubKeywordList';
 import { Button } from '@mui/material';
 import { useState } from 'react';
-import { AddKeywordModal } from '../RoadmapEditKeywordPage/components/AddKeywordModal';
+import { KeywordModal } from '../RoadmapEditKeywordPage/components/KeywordModal';
 
 const RoadmapTopKeywordsPage = () => {
   const { sessionId, keywordId } = useParams();
@@ -40,12 +40,7 @@ const RoadmapTopKeywordsPage = () => {
       >
         해당 최상위 키워드 하위에 새 키워드 추가
       </Button>
-      <AddKeywordModal
-        open={open}
-        onClose={handleClose}
-        sessionId={Number(sessionId)}
-        parentKeywordId={null}
-      />
+      <KeywordModal open={open} onClose={handleClose} parentKeywordId={null} />
     </div>
   );
 };

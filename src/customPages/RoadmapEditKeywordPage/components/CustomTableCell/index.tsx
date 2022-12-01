@@ -21,12 +21,7 @@ export const CustomTableCell = ({
                 variant="contained"
                 onClick={() =>
                   navigate(`/roadmap/${sessionId}/editSubKeywords`, {
-                    state: {
-                      childrenKeywordList: itemValue,
-                      sessionId,
-                      name: item.name,
-                      parentKeywordId: item.keywordId,
-                    },
+                    state: item,
                   })
                 }
               >
