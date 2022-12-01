@@ -1,4 +1,5 @@
-import { Modal, Box, TextField } from '@mui/material';
+import { Modal, TextField } from '@mui/material';
+import { FormEvent } from 'react';
 import { useEditKeyword } from '../../../../hooks/roadmap';
 import useInput from '../../../../hooks/useInput';
 import {
@@ -6,6 +7,7 @@ import {
   validateName,
   validateImportance,
 } from '../../../../utils/validator';
+import CenterBox from '../../../common/CenterBox';
 import { EditKeywordModalProps } from './type';
 
 export const EditKeywordModal = ({
@@ -30,7 +32,24 @@ export const EditKeywordModal = ({
   const isAllValidated =
     name.isValidated && description.isValidated && importance.isValidated;
 
-  const { mutate: editKeyword } = useEditKeyword({ successCallback: onClose });
+  const { mutateAsync: editKeyword } = useEditKeyword();
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (name.value && importance.value && description.value) {
+      await editKeyword({
+        sessionId,
+        keywordId,
+        name: name.value,
+        importance: Number(importance.value),
+        description: description.value,
+        order: keywordContents.order,
+        parentKeywordId: keywordContents.parentKeywordId,
+      });
+      onClose();
+    }
+  };
 
   return (
     <Modal
@@ -39,24 +58,8 @@ export const EditKeywordModal = ({
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <Box sx={style}>
-        <form
-          onSubmit={(event) => {
-            event.preventDefault();
-
-            if (name.value && importance.value && description.value) {
-              editKeyword({
-                sessionId,
-                keywordId,
-                name: name.value,
-                importance: Number(importance.value),
-                description: description.value,
-                order: keywordContents.order,
-                parentKeywordId: keywordContents.parentKeywordId,
-              });
-            }
-          }}
-        >
+      <CenterBox>
+        <form onSubmit={handleSubmit}>
           <div>
             <TextField
               required
@@ -112,19 +115,7 @@ export const EditKeywordModal = ({
           </div>
           <button disabled={!isAllValidated}>수정 완료</button>
         </form>
-      </Box>
+      </CenterBox>
     </Modal>
   );
-};
-
-export const style = {
-  position: 'absolute' as const,
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #646464',
-  boxShadow: 24,
-  p: 4,
 };

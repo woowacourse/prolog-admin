@@ -1,4 +1,4 @@
-import { Modal, Box, TextField } from '@mui/material';
+import { Modal, TextField } from '@mui/material';
 import { useAddKeyword } from '../../../../hooks/roadmap';
 import useInput from '../../../../hooks/useInput';
 import {
@@ -7,6 +7,7 @@ import {
   validateImportance,
   validateOrder,
 } from '../../../../utils/validator';
+import CenterBox from '../../../common/CenterBox';
 import { AddKeywordModalProps } from './type';
 
 export const AddKeywordModal = ({
@@ -23,7 +24,7 @@ export const AddKeywordModal = ({
   const isAllValidated =
     name.isValidated && description.isValidated && importance.isValidated;
 
-  const { mutate: addKeyword } = useAddKeyword({ successCallback: onClose });
+  const { mutate: addKeyword } = useAddKeyword();
 
   return (
     <Modal
@@ -32,20 +33,27 @@ export const AddKeywordModal = ({
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <Box sx={style}>
+      <CenterBox>
         <form
           onSubmit={(event) => {
             event.preventDefault();
 
             if (name.value && importance.value && description.value) {
-              addKeyword({
-                sessionId,
-                name: name.value,
-                importance: Number(importance.value),
-                description: description.value,
-                order: Number(order.value),
-                parentKeywordId,
-              });
+              addKeyword(
+                {
+                  sessionId,
+                  name: name.value,
+                  importance: Number(importance.value),
+                  description: description.value,
+                  order: Number(order.value),
+                  parentKeywordId,
+                },
+                {
+                  onSuccess() {
+                    onClose();
+                  },
+                }
+              );
             }
           }}
         >
@@ -106,19 +114,7 @@ export const AddKeywordModal = ({
           </div>
           <button disabled={!isAllValidated}>키워드 추가</button>
         </form>
-      </Box>
+      </CenterBox>
     </Modal>
   );
-};
-
-export const style = {
-  position: 'absolute' as const,
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #646464',
-  boxShadow: 24,
-  p: 4,
 };

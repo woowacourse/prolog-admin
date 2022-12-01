@@ -165,39 +165,14 @@ export const editKeyword = ({
     description,
   });
 
-export const useEditKeyword = ({
-  successCallback,
-}: {
-  successCallback?: () => void;
-}) => {
+export const useEditKeyword = () => {
   const queryClient = useQueryClient();
 
-  return useMutation(
-    ({
-      sessionId,
-      keywordId,
-      name,
-      order,
-      importance,
-      parentKeywordId,
-      description,
-    }: EditKeywordRequest) =>
-      editKeyword({
-        sessionId,
-        keywordId,
-        name,
-        order,
-        importance,
-        parentKeywordId,
-        description,
-      }),
-    {
-      onSuccess() {
-        queryClient.invalidateQueries([QUERY_KEY.childKeywordList]);
-        successCallback && successCallback();
-      },
-    }
-  );
+  return useMutation(editKeyword, {
+    onSuccess() {
+      queryClient.invalidateQueries([QUERY_KEY.childKeywordList]);
+    },
+  });
 };
 
 // 1. [C] Keyword 생성(admin)
