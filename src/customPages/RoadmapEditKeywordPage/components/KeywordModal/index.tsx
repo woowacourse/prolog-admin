@@ -44,9 +44,6 @@ export const KeywordModal = ({
   );
   const order = useInput('', validateOrder);
 
-  const isAllValidated =
-    name.isValidated && description.isValidated && importance.isValidated;
-
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -76,6 +73,9 @@ export const KeywordModal = ({
       onClose();
     }
   };
+
+  const isAllValidated =
+    name.isValidated && description.isValidated && importance.isValidated;
 
   return (
     <Modal

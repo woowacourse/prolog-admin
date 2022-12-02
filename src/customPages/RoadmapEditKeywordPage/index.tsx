@@ -1,4 +1,4 @@
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Button } from '@mui/material';
 import SubKeywordList from './components/SubKeywordList';
 import { KeywordModal } from './components/KeywordModal';
@@ -6,7 +6,6 @@ import { KeywordResponse } from '../../hooks/roadmap';
 import useModal from '../../hooks/useModal';
 
 const RoadmapEditKeywordPage = () => {
-  const sessionId = Number(useParams().sessionid);
   const parentKeyword = useLocation().state as KeywordResponse;
   const { name, childrenKeywords } = parentKeyword;
 
@@ -16,10 +15,7 @@ const RoadmapEditKeywordPage = () => {
     <div>
       <h2>[{name}] 하위 키워드 수정/삭제</h2>
       {childrenKeywords && (
-        <SubKeywordList
-          childrenKeywordList={childrenKeywords}
-          sessionId={sessionId}
-        />
+        <SubKeywordList childrenKeywordList={childrenKeywords} />
       )}
       <br />
       <Button

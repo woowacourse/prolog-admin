@@ -13,9 +13,12 @@ import {
 import { KeywordResponse, useDeleteKeyword } from '../../../../hooks/roadmap';
 import { KeywordModal } from '../KeywordModal';
 import { CustomTableCell } from '../CustomTableCell';
-import { SubKeywordListProps } from './type';
 import { useNavigate, useParams } from 'react-router-dom';
 import useModal from '../../../../hooks/useModal';
+
+export type SubKeywordListProps = {
+  childrenKeywordList: KeywordResponse[];
+};
 
 const SubKeywordList = ({ childrenKeywordList }: SubKeywordListProps) => {
   const sessionId = Number(useParams().sessionId);
