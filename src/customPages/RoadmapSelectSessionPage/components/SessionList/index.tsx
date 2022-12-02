@@ -8,9 +8,13 @@ import {
   Paper,
   Button,
 } from '@mui/material';
-import { SessionListProps } from './type';
 
-const SessionList = ({ rows, onClickMove }: SessionListProps) => {
+export type SessionListProps = {
+  rows: { id: number }[];
+  selectSession: (id: number) => void;
+};
+
+const SessionList = ({ rows, selectSession }: SessionListProps) => {
   const columns = ['Id', '이름'];
 
   return (
@@ -34,7 +38,7 @@ const SessionList = ({ rows, onClickMove }: SessionListProps) => {
                   {value}
                 </TableCell>
               ))}
-              <TableCell onClick={() => onClickMove(row.id)} align="right">
+              <TableCell onClick={() => selectSession(row.id)} align="right">
                 <Button variant="contained">선택</Button>
               </TableCell>
             </TableRow>

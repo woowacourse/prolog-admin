@@ -3,22 +3,20 @@ import { useGetSessions } from '../../hooks/roadmap';
 import SessionList from './components/SessionList';
 
 const RoadmapSelectSessionPage = () => {
-  const { sessions } = useGetSessions();
   const navigate = useNavigate();
 
-  if (typeof sessions === 'undefined') {
-    return <h3>세션이 존재하지 않습니다</h3>;
-  }
+  const { sessions } = useGetSessions();
+
+  const selectSession = (sessionId: number) => {
+    navigate(`/roadmap/${sessionId}`);
+  };
 
   return (
     <div>
       <h2>세션 선택</h2>
-      <SessionList
-        rows={sessions}
-        onClickMove={(sessionId: number) => {
-          navigate(`/roadmap/${sessionId}`);
-        }}
-      />
+      {sessions && (
+        <SessionList rows={sessions} selectSession={selectSession} />
+      )}
     </div>
   );
 };
