@@ -53,7 +53,7 @@ export const useGetKeyword = ({
 
 // 5. 세션별 Keyword 목록 조회
 export const getTopKeywordList = async (sessionId: number) => {
-  const response = await client.get<KeywordListResponse>(
+  const response = await client.get<TopKeywordListResponse>(
     `/sessions/${sessionId}/keywords`
   );
 
@@ -324,10 +324,10 @@ export const useDeleteQuiz = ({
 /////////////////////////////////////
 // 타입
 // Request
-export interface Session {
+export type Session = {
   id: number;
   name: string;
-}
+};
 
 type SessionAndKeywordId = {
   sessionId: number;
@@ -357,7 +357,7 @@ export type AddKeywordRequest = {
 
 // Response
 
-export interface KeywordResponse {
+export type KeywordResponse = {
   name: string;
   keywordId: number;
   order: number;
@@ -365,16 +365,22 @@ export interface KeywordResponse {
   parentKeywordId: number;
   description: string;
   childrenKeywords: KeywordResponse[] | null;
-}
+};
+
+export type TopKeywordResponse = KeywordResponse & { childrenKeywords: null };
 
 export interface KeywordListResponse {
   data: KeywordResponse[];
 }
 
-export interface Quiz {
+export interface TopKeywordListResponse {
+  data: TopKeywordResponse[];
+}
+
+export type Quiz = {
   quizId: number;
   question: string;
-}
+};
 
 export interface QuizListResponse {
   data: Quiz[];

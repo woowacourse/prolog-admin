@@ -18,6 +18,7 @@ import {
 import useModal from '../../hooks/useModal';
 import { useState } from 'react';
 import QuizModal from './QuizModal';
+import { translateColumns } from '../../utils/translate';
 
 const QuizList = () => {
   const params = useParams();
@@ -47,7 +48,7 @@ const QuizList = () => {
     }
   };
 
-  const columns = ['편집버튼', 'Id', '내용'];
+  const columns = ['편집버튼', ...translateColumns(quizList?.[0] ?? {})];
 
   return (
     <>

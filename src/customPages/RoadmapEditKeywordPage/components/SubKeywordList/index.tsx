@@ -15,6 +15,7 @@ import { KeywordModal } from '../KeywordModal';
 import { CustomTableCell } from '../CustomTableCell';
 import { useNavigate, useParams } from 'react-router-dom';
 import useModal from '../../../../hooks/useModal';
+import { translateColumns } from '../../../../utils/translate';
 
 export type SubKeywordListProps = {
   childrenKeywordList: KeywordResponse[];
@@ -48,17 +49,7 @@ const SubKeywordList = ({ childrenKeywordList }: SubKeywordListProps) => {
     navigate(`/roadmap/${sessionId}/${item.keywordId}/quizs`, { state: item });
   };
 
-  const columns = [
-    '편집버튼',
-    'Id',
-    '이름',
-    '설명',
-    '순서',
-    '중요도',
-    '상위키워드Id',
-    '하위키워드',
-    '퀴즈',
-  ];
+  const columns = ['편집버튼', ...translateColumns(childrenKeywordList[0])];
 
   return (
     <>

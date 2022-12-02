@@ -10,6 +10,7 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useGetSessions } from '../../../../hooks/roadmap';
+import { translateColumns } from '../../../../utils/translate';
 
 const SessionList = () => {
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ const SessionList = () => {
     navigate(`/roadmap/${sessionId}`);
   };
 
-  const columns = ['Id', '이름'];
+  const columns = [...translateColumns(sessions?.[0] ?? {})];
 
   return (
     <TableContainer component={Paper}>

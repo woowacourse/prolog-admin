@@ -10,6 +10,7 @@ import {
 } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useGetTopKeywordList } from '../../../../hooks/roadmap';
+import { translateColumns } from '../../../../utils/translate';
 
 const TopKeywordList = () => {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ const TopKeywordList = () => {
     navigate(`/roadmap/${sessionId}/${keywordId}`);
   };
 
-  const columns = ['Id', '이름', '설명', '순서', '중요도'];
+  const columns = [...translateColumns(topKeywordList?.[0] ?? {})];
 
   return (
     <TableContainer component={Paper}>
