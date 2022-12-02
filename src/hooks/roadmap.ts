@@ -39,7 +39,7 @@ export const useGetKeyword = ({
   sessionId: number;
   keywordId: number;
 }) => {
-  const { data } = useQuery([QUERY_KEY.keyword], () =>
+  const { data } = useQuery([QUERY_KEY.keyword, sessionId, keywordId], () =>
     getKeyword({
       sessionId,
       keywordId,
@@ -61,7 +61,7 @@ export const getTopKeywordList = async (sessionId: number) => {
 };
 
 export const useGetTopKeywordList = (sessionId: number) => {
-  const { data } = useQuery([QUERY_KEY.topKeywordList], () =>
+  const { data } = useQuery([QUERY_KEY.topKeywordList, sessionId], () =>
     getTopKeywordList(sessionId)
   );
 
@@ -86,11 +86,13 @@ export const useGetChildrenKeywordList = ({
   sessionId,
   keywordId,
 }: ChildKeywordListRequest) => {
-  const { data, refetch } = useQuery([QUERY_KEY.childKeywordList], () =>
-    getChildKeywordList({
-      sessionId,
-      keywordId,
-    })
+  const { data, refetch } = useQuery(
+    [QUERY_KEY.childKeywordList, sessionId, keywordId],
+    () =>
+      getChildKeywordList({
+        sessionId,
+        keywordId,
+      })
   );
 
   return {
@@ -136,15 +138,15 @@ export const deleteKeyword = ({ sessionId, keywordId }: DeleteKeywordRequest) =>
 export const useDeleteKeyword = () => {
   const queryClient = useQueryClient();
 
-  return useMutation(
-    ({ sessionId, keywordId }: DeleteKeywordRequest) =>
-      deleteKeyword({ sessionId, keywordId }),
-    {
-      onSuccess() {
-        queryClient.invalidateQueries([QUERY_KEY.childKeywordList]);
-      },
-    }
-  );
+  return useMutation(deleteKeyword, {
+    onSuccess(_, { sessionId, keywordId }) {
+      queryClient.invalidateQueries([
+        QUERY_KEY.childKeywordList,
+        sessionId,
+        keywordId,
+      ]);
+    },
+  });
 };
 
 // 3. [U] Keyword 수정(admin)
@@ -169,8 +171,12 @@ export const useEditKeyword = () => {
   const queryClient = useQueryClient();
 
   return useMutation(editKeyword, {
-    onSuccess() {
-      queryClient.invalidateQueries([QUERY_KEY.childKeywordList]);
+    onSuccess(_, { sessionId, keywordId }) {
+      queryClient.invalidateQueries([
+        QUERY_KEY.childKeywordList,
+        sessionId,
+        keywordId,
+      ]);
     },
   });
 };
@@ -196,8 +202,8 @@ export const useAddKeyword = () => {
   const queryClient = useQueryClient();
 
   return useMutation(addKeyword, {
-    onSuccess() {
-      queryClient.invalidateQueries([QUERY_KEY.childKeywordList]);
+    onSuccess(_, { sessionId }) {
+      queryClient.invalidateQueries([QUERY_KEY.childKeywordList, sessionId]);
     },
   });
 };
