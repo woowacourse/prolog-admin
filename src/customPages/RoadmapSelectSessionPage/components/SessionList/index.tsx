@@ -8,13 +8,18 @@ import {
   Paper,
   Button,
 } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { useGetSessions } from '../../../../hooks/roadmap';
 
-export type SessionListProps = {
-  rows: { id: number }[];
-  selectSession: (id: number) => void;
-};
+const SessionList = () => {
+  const navigate = useNavigate();
 
-const SessionList = ({ rows, selectSession }: SessionListProps) => {
+  const { sessions } = useGetSessions();
+
+  const selectSession = (sessionId: number) => {
+    navigate(`/roadmap/${sessionId}`);
+  };
+
   const columns = ['Id', '이름'];
 
   return (
@@ -28,7 +33,7 @@ const SessionList = ({ rows, selectSession }: SessionListProps) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {sessions?.map((row) => (
             <TableRow
               key={row.id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
