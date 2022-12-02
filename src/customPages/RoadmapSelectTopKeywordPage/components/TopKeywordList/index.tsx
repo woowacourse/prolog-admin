@@ -8,9 +8,19 @@ import {
   Paper,
   Button,
 } from '@mui/material';
-import { TopKeywordListProps } from './type';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useGetTopKeywordList } from '../../../../hooks/roadmap';
 
-const TopKeywordList = ({ rows, onClickMove }: TopKeywordListProps) => {
+const TopKeywordList = () => {
+  const navigate = useNavigate();
+  const { sessionId } = useParams();
+
+  const { topKeywordList } = useGetTopKeywordList(Number(sessionId));
+
+  const selectKeyword = (keywordId: number) => {
+    navigate(`/roadmap/${sessionId}/${keywordId}`);
+  };
+
   const columns = ['Id', '이름', '설명', '순서', '중요도'];
 
   return (
@@ -24,7 +34,7 @@ const TopKeywordList = ({ rows, onClickMove }: TopKeywordListProps) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {topKeywordList?.map((row) => (
             <TableRow
               key={row.keywordId}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -35,7 +45,7 @@ const TopKeywordList = ({ rows, onClickMove }: TopKeywordListProps) => {
                 </TableCell>
               ))}
               <TableCell
-                onClick={() => onClickMove(row.keywordId)}
+                onClick={() => selectKeyword(row.keywordId)}
                 align="right"
               >
                 <Button variant="contained">선택</Button>
