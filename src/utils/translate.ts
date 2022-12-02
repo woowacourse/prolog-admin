@@ -17,6 +17,6 @@ const columnNameTranslator = {
 
 export const translateColumns = (obj: Record<PropertyKey, unknown>) => {
   return Object.keys(obj).map(
-    (key) => (columnNameTranslator as Record<string, string>)[key]
+    (key) => (columnNameTranslator as Record<string, string>)[key] ?? key
   );
 };
