@@ -7,7 +7,7 @@ import useModal from '../../hooks/useModal';
 
 const RoadmapEditKeywordPage = () => {
   const parentKeyword = useLocation().state as KeywordResponse;
-  const { name, childrenKeywords } = parentKeyword;
+  const { name, childrenKeywords, keywordId: parentKeywordId } = parentKeyword;
 
   const { open, openModal, closeModal } = useModal();
 
@@ -31,7 +31,7 @@ const RoadmapEditKeywordPage = () => {
       <KeywordModal
         open={open}
         onClose={closeModal}
-        parentKeywordId={parentKeyword.keywordId}
+        parentKeywordId={parentKeywordId}
       />
     </div>
   );
