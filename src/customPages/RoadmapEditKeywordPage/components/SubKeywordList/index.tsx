@@ -49,7 +49,11 @@ const SubKeywordList = ({ childrenKeywordList }: SubKeywordListProps) => {
     navigate(`/roadmap/${sessionId}/${item.keywordId}/quizs`, { state: item });
   };
 
-  const columns = ['편집버튼', ...translateColumns(childrenKeywordList[0])];
+  const columns = [
+    '편집버튼',
+    ...translateColumns(childrenKeywordList[0]),
+    '퀴즈',
+  ];
 
   return (
     <>
