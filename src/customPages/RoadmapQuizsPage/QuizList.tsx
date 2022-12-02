@@ -1,5 +1,9 @@
 import { useParams } from 'react-router-dom';
-import { Quiz, useDeleteQuiz } from '../../hooks/roadmap';
+import {
+  Quiz,
+  useDeleteQuiz,
+  useGetQuizListByKeyword,
+} from '../../hooks/roadmap';
 import {
   Table,
   TableBody,
@@ -15,20 +19,22 @@ import useModal from '../../hooks/useModal';
 import { useState } from 'react';
 import QuizModal from './QuizModal';
 
-export type QuizListProps = {
-  quizList: Quiz[];
-};
+const QuizList = () => {
+  const params = useParams();
+  const sessionId = Number(params.sessionId);
+  const keywordId = Number(params.keywordId);
 
-const QuizList = ({ quizList }: QuizListProps) => {
-  const { sessionId, keywordId } = useParams();
+  const { quizList } = useGetQuizListByKeyword({
+    sessionId,
+    keywordId,
+  });
+  const { mutateAsync: deleteQuiz } = useDeleteQuiz({
+    sessionId,
+    keywordId,
+  });
 
   const [editingQuiz, setEditingQuiz] = useState<Quiz>();
   const { open, openModal, closeModal } = useModal();
-
-  const { mutateAsync: deleteQuiz } = useDeleteQuiz({
-    sessionId: Number(sessionId),
-    keywordId: Number(keywordId),
-  });
 
   const handleClickEditButton = (quiz: Quiz) => {
     openModal();
@@ -55,7 +61,7 @@ const QuizList = ({ quizList }: QuizListProps) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {quizList.map((item) => (
+            {quizList?.map((item) => (
               <TableRow
                 key={item.quizId}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
