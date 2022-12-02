@@ -28,8 +28,9 @@ const RoadmapEditKeywordPage = () => {
         fullWidth
         size="large"
         color="success"
+        style={{ textTransform: 'unset' }} // prevent uppercase
       >
-        [{parentKeyword.name}] 하위에 새 키워드 추가
+        [{name}] 하위에 새 키워드 추가
       </Button>
       <KeywordModal
         open={open}
