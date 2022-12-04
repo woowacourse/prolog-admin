@@ -23,7 +23,7 @@ jobs:
           yarn install
       - name: Build
         run: |
-          yarn build
+          yarn build:dev
         env:
           CI: false
 
@@ -33,6 +33,6 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
           aws s3 cp --recursive --region ap-northeast-2 build s3://prolog-dev-admin
-    
+
       - name: Invalidate CloudFront Cache
         run: aws cloudfront create-invalidation --region ap-northeast-2 --distribution-id ${{secrets.AWS_CLOUDFRONT_DISTRIBUTION}} --paths "/*"
