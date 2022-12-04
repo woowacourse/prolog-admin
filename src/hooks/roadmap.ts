@@ -39,7 +39,7 @@ export const useGetKeyword = ({
   sessionId: number;
   keywordId: number;
 }) => {
-  const { data } = useQuery([QUERY_KEY.keyword], () =>
+  const { data } = useQuery([QUERY_KEY.keyword, sessionId, keywordId], () =>
     getKeyword({
       sessionId,
       keywordId,
@@ -53,7 +53,7 @@ export const useGetKeyword = ({
 
 // 5. 세션별 Keyword 목록 조회
 export const getTopKeywordList = async (sessionId: number) => {
-  const response = await client.get<KeywordListResponse>(
+  const response = await client.get<TopKeywordListResponse>(
     `/sessions/${sessionId}/keywords`
   );
 
@@ -61,7 +61,7 @@ export const getTopKeywordList = async (sessionId: number) => {
 };
 
 export const useGetTopKeywordList = (sessionId: number) => {
-  const { data } = useQuery([QUERY_KEY.topKeywordList], () =>
+  const { data } = useQuery([QUERY_KEY.topKeywordList, sessionId], () =>
     getTopKeywordList(sessionId)
   );
 
@@ -86,11 +86,13 @@ export const useGetChildrenKeywordList = ({
   sessionId,
   keywordId,
 }: ChildKeywordListRequest) => {
-  const { data, refetch } = useQuery([QUERY_KEY.childKeywordList], () =>
-    getChildKeywordList({
-      sessionId,
-      keywordId,
-    })
+  const { data, refetch } = useQuery(
+    [QUERY_KEY.childKeywordList, sessionId, keywordId],
+    () =>
+      getChildKeywordList({
+        sessionId,
+        keywordId,
+      })
   );
 
   return {
@@ -115,11 +117,13 @@ export const useGetQuizListByKeyword = ({
   sessionId,
   keywordId,
 }: QuizListByKeywordRequest) => {
-  const { data } = useQuery([QUERY_KEY.quizListByKeyword], () =>
-    getQuizListByKeyword({
-      sessionId,
-      keywordId,
-    })
+  const { data } = useQuery(
+    [QUERY_KEY.quizListByKeyword, sessionId, keywordId],
+    () =>
+      getQuizListByKeyword({
+        sessionId,
+        keywordId,
+      })
   );
 
   return {
@@ -134,15 +138,15 @@ export const deleteKeyword = ({ sessionId, keywordId }: DeleteKeywordRequest) =>
 export const useDeleteKeyword = () => {
   const queryClient = useQueryClient();
 
-  return useMutation(
-    ({ sessionId, keywordId }: DeleteKeywordRequest) =>
-      deleteKeyword({ sessionId, keywordId }),
-    {
-      onSuccess() {
-        queryClient.invalidateQueries([QUERY_KEY.childKeywordList]);
-      },
-    }
-  );
+  return useMutation(deleteKeyword, {
+    onSuccess(_, { sessionId, keywordId }) {
+      queryClient.invalidateQueries([
+        QUERY_KEY.childKeywordList,
+        sessionId,
+        keywordId,
+      ]);
+    },
+  });
 };
 
 // 3. [U] Keyword 수정(admin)
@@ -163,39 +167,18 @@ export const editKeyword = ({
     description,
   });
 
-export const useEditKeyword = ({
-  successCallback,
-}: {
-  successCallback?: () => void;
-}) => {
+export const useEditKeyword = () => {
   const queryClient = useQueryClient();
 
-  return useMutation(
-    ({
-      sessionId,
-      keywordId,
-      name,
-      order,
-      importance,
-      parentKeywordId,
-      description,
-    }: EditKeywordRequest) =>
-      editKeyword({
+  return useMutation(editKeyword, {
+    onSuccess(_, { sessionId, keywordId }) {
+      queryClient.invalidateQueries([
+        QUERY_KEY.childKeywordList,
         sessionId,
         keywordId,
-        name,
-        order,
-        importance,
-        parentKeywordId,
-        description,
-      }),
-    {
-      onSuccess() {
-        queryClient.invalidateQueries([QUERY_KEY.childKeywordList]);
-        successCallback && successCallback();
-      },
-    }
-  );
+      ]);
+    },
+  });
 };
 
 // 1. [C] Keyword 생성(admin)
@@ -215,34 +198,124 @@ export const addKeyword = ({
     description,
   });
 
-export const useAddKeyword = ({
-  successCallback,
-}: {
-  successCallback?: () => void;
-}) => {
+export const useAddKeyword = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(addKeyword, {
+    onSuccess(_, { sessionId }) {
+      queryClient.invalidateQueries([QUERY_KEY.childKeywordList, sessionId]);
+    },
+  });
+};
+
+type AddQuizRequest = {
+  sessionId: number;
+  keywordId: number;
+  question: string;
+};
+
+export const addQuiz = ({ sessionId, keywordId, question }: AddQuizRequest) =>
+  client.post(`/sessions/${sessionId}/keywords/${keywordId}/quizs`, {
+    question,
+  });
+
+export const useAddQuiz = ({
+  sessionId,
+  keywordId,
+}: Pick<AddQuizRequest, 'sessionId' | 'keywordId'>) => {
   const queryClient = useQueryClient();
 
   return useMutation(
-    ({
-      sessionId,
-      name,
-      order,
-      importance,
-      parentKeywordId,
-      description,
-    }: AddKeywordRequest) =>
-      addKeyword({
+    (question: Pick<AddQuizRequest, 'question'>['question']) =>
+      addQuiz({
         sessionId,
-        name,
-        order,
-        importance,
-        parentKeywordId,
-        description,
+        keywordId,
+        question,
       }),
     {
       onSuccess() {
-        queryClient.invalidateQueries([QUERY_KEY.childKeywordList]);
-        successCallback && successCallback();
+        queryClient.invalidateQueries([
+          QUERY_KEY.quizListByKeyword,
+          sessionId,
+          keywordId,
+        ]);
+      },
+    }
+  );
+};
+
+type EditQuizRequest = {
+  sessionId: number;
+  keywordId: number;
+  quiz: Quiz;
+};
+
+export const editQuiz = ({ sessionId, keywordId, quiz }: EditQuizRequest) =>
+  client.put(
+    `/sessions/${sessionId}/keywords/${keywordId}/quizs/${quiz.quizId}`,
+    {
+      question: quiz.question,
+    }
+  );
+
+export const useEditQuiz = ({
+  sessionId,
+  keywordId,
+}: Pick<EditQuizRequest, 'sessionId' | 'keywordId'>) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    (quiz: Pick<EditQuizRequest, 'quiz'>['quiz']) =>
+      editQuiz({
+        sessionId,
+        keywordId,
+        quiz,
+      }),
+    {
+      onSuccess() {
+        queryClient.invalidateQueries([
+          QUERY_KEY.quizListByKeyword,
+          sessionId,
+          keywordId,
+        ]);
+      },
+    }
+  );
+};
+
+type DeleteQuizRequest = {
+  sessionId: number;
+  keywordId: number;
+  quizId: number;
+};
+
+export const deleteQuiz = ({
+  sessionId,
+  keywordId,
+  quizId,
+}: DeleteQuizRequest) =>
+  client.delete(`/sessions/${sessionId}/keywords/${keywordId}/quizs/${quizId}`);
+
+export const useDeleteQuiz = ({
+  sessionId,
+  keywordId,
+}: Pick<DeleteQuizRequest, 'sessionId' | 'keywordId'>) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    (quizId: Pick<DeleteQuizRequest, 'quizId'>['quizId']) =>
+      deleteQuiz({
+        sessionId,
+        keywordId,
+        quizId,
+      }),
+    {
+      onSuccess() {
+        queryClient.invalidateQueries([
+          QUERY_KEY.quizListByKeyword,
+          sessionId,
+          keywordId,
+        ]);
       },
     }
   );
@@ -251,10 +324,10 @@ export const useAddKeyword = ({
 /////////////////////////////////////
 // 타입
 // Request
-export interface Session {
+export type Session = {
   id: number;
   name: string;
-}
+};
 
 type SessionAndKeywordId = {
   sessionId: number;
@@ -284,7 +357,7 @@ export type AddKeywordRequest = {
 
 // Response
 
-export interface KeywordResponse {
+export type KeywordResponse = {
   name: string;
   keywordId: number;
   order: number;
@@ -292,16 +365,22 @@ export interface KeywordResponse {
   parentKeywordId: number;
   description: string;
   childrenKeywords: KeywordResponse[] | null;
-}
+};
+
+export type TopKeywordResponse = KeywordResponse & { childrenKeywords: null };
 
 export interface KeywordListResponse {
   data: KeywordResponse[];
 }
 
-export interface Quiz {
+export interface TopKeywordListResponse {
+  data: TopKeywordResponse[];
+}
+
+export type Quiz = {
   quizId: number;
   question: string;
-}
+};
 
 export interface QuizListResponse {
   data: Quiz[];

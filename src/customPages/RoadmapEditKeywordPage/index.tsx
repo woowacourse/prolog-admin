@@ -1,41 +1,37 @@
-import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Button } from '@mui/material';
-import { AddKeywordModal } from './components/AddKeywordModal';
 import SubKeywordList from './components/SubKeywordList';
+import { KeywordModal } from './components/KeywordModal';
+import { KeywordResponse } from '../../hooks/roadmap';
+import useModal from '../../hooks/useModal';
 
 const RoadmapEditKeywordPage = () => {
-  const { state } = useLocation();
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const parentKeyword = useLocation().state as KeywordResponse;
+  const { name, childrenKeywords, keywordId: parentKeywordId } = parentKeyword;
+
+  const { open, openModal, closeModal } = useModal();
 
   return (
     <div>
-      <h2>[{state.name}] 하위 키워드 수정/삭제</h2>
-      <SubKeywordList
-        childrenKeywordList={state.childrenKeywordList}
-        sessionId={state.sessionId}
-      />
+      <h2>[{name}] 하위 키워드 수정/삭제</h2>
+      {childrenKeywords && (
+        <SubKeywordList childrenKeywordList={childrenKeywords} />
+      )}
       <br />
       <Button
-        onClick={handleOpen}
+        onClick={openModal}
         variant="contained"
         fullWidth
         size="large"
         color="success"
+        style={{ textTransform: 'unset' }} // prevent uppercase
       >
-        [{state.name}] 하위에 새 키워드 추가
+        [{name}] 하위에 새 키워드 추가
       </Button>
-      <AddKeywordModal
+      <KeywordModal
         open={open}
-        onClose={handleClose}
-        sessionId={state.sessionId}
-        parentKeywordId={state.parentKeywordId}
+        onClose={closeModal}
+        parentKeywordId={parentKeywordId}
       />
     </div>
   );
