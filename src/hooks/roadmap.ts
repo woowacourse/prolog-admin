@@ -75,7 +75,7 @@ export const getChildKeywordList = async ({
   sessionId,
   keywordId,
 }: ChildKeywordListRequest) => {
-  const response = await client.get<KeywordListResponse>(
+  const response = await client.get<KeywordResponse>(
     `/sessions/${sessionId}/keywords/${keywordId}/children`
   );
 
@@ -96,7 +96,7 @@ export const useGetChildrenKeywordList = ({
   );
 
   return {
-    childrenKeywordList: data?.data,
+    childrenKeywordList: data,
     refetchChildrenKeywordList: refetch,
   };
 };

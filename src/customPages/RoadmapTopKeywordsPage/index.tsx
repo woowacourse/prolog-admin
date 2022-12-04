@@ -13,7 +13,7 @@ const RoadmapTopKeywordsPage = () => {
     <div>
       <h2>최상위 키워드 수정/삭제</h2>
       {childrenKeywordList && (
-        <SubKeywordList childrenKeywordList={childrenKeywordList} />
+        <SubKeywordList childrenKeywordList={[childrenKeywordList]} />
       )}
       <br />
     </div>
