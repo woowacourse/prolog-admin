@@ -8,10 +8,20 @@ import {
   Paper,
   Button,
 } from '@mui/material';
-import { SessionListProps } from './type';
+import { useNavigate } from 'react-router-dom';
+import { useGetSessions } from '../../../../hooks/roadmap';
+import { translateColumns } from '../../../../utils/translate';
 
-const SessionList = ({ rows, onClickMove }: SessionListProps) => {
-  const columns = ['Id', '이름'];
+const SessionList = () => {
+  const navigate = useNavigate();
+
+  const { sessions } = useGetSessions();
+
+  const selectSession = (sessionId: number) => {
+    navigate(`/roadmap/${sessionId}`);
+  };
+
+  const columns = [...translateColumns(sessions?.[0] ?? {})];
 
   return (
     <TableContainer component={Paper}>
@@ -24,7 +34,7 @@ const SessionList = ({ rows, onClickMove }: SessionListProps) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {sessions?.map((row) => (
             <TableRow
               key={row.id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -34,7 +44,7 @@ const SessionList = ({ rows, onClickMove }: SessionListProps) => {
                   {value}
                 </TableCell>
               ))}
-              <TableCell onClick={() => onClickMove(row.id)} align="right">
+              <TableCell onClick={() => selectSession(row.id)} align="right">
                 <Button variant="contained">선택</Button>
               </TableCell>
             </TableRow>

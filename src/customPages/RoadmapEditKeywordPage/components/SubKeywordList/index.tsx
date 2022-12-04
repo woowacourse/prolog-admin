@@ -10,28 +10,27 @@ import {
   Button,
   Stack,
 } from '@mui/material';
-import { useDeleteKeyword } from '../../../../hooks/roadmap';
-import { EditKeywordModal } from '../EditKeywordModal';
+import { KeywordResponse, useDeleteKeyword } from '../../../../hooks/roadmap';
+import { KeywordModal } from '../KeywordModal';
 import { CustomTableCell } from '../CustomTableCell';
-import { ChildrenKeyword } from '../../../../types';
-import { SubKeywordListProps } from './type';
+import { useNavigate, useParams } from 'react-router-dom';
+import useModal from '../../../../hooks/useModal';
+import { translateColumns } from '../../../../utils/translate';
 
-const SubKeywordList = ({
-  childrenKeywordList,
-  sessionId,
-}: SubKeywordListProps) => {
-  const columns = [
-    '편집버튼',
-    'Id',
-    '이름',
-    '설명',
-    '순서',
-    '중요도',
-    '상위키워드Id',
-    '하위키워드',
-  ];
+export type SubKeywordListProps = {
+  childrenKeywordList: KeywordResponse[];
+};
+
+const SubKeywordList = ({ childrenKeywordList }: SubKeywordListProps) => {
+  const sessionId = Number(useParams().sessionId);
+  const navigate = useNavigate();
+
+  const [editingKeyword, setEditingKeyword] = useState<KeywordResponse>();
+
+  const { open, openModal, closeModal } = useModal();
 
   const { mutate: deleteKeyword } = useDeleteKeyword();
+
   const handleDeleteButton = ({
     sessionId,
     keywordId,
@@ -46,22 +45,15 @@ const SubKeywordList = ({
     }
   };
 
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
+  const handleClickQuizButton = (item: KeywordResponse) => {
+    navigate(`/roadmap/${sessionId}/${item.keywordId}/quizs`, { state: item });
   };
 
-  const [keywordContents, setKeywordContents] = useState<ChildrenKeyword>({
-    keywordId: 0,
-    name: '',
-    order: 0,
-    importance: 0,
-    description: '',
-    parentKeywordId: null,
-  });
+  const columns = [
+    '편집버튼',
+    ...translateColumns(childrenKeywordList[0]),
+    '퀴즈',
+  ];
 
   return (
     <>
@@ -86,8 +78,8 @@ const SubKeywordList = ({
                       variant="outlined"
                       color="success"
                       onClick={() => {
-                        setKeywordContents(item);
-                        handleOpen();
+                        setEditingKeyword(item);
+                        openModal();
                       }}
                     >
                       수정
@@ -109,17 +101,23 @@ const SubKeywordList = ({
                   </Stack>
                 </TableCell>
                 <CustomTableCell item={item} sessionId={sessionId} />
+                <TableCell>
+                  <Button
+                    variant="contained"
+                    onClick={() => handleClickQuizButton(item)}
+                  >
+                    퀴즈 보기
+                  </Button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
-      <EditKeywordModal
+      <KeywordModal
         open={open}
-        onClose={handleClose}
-        keywordContents={keywordContents}
-        sessionId={sessionId}
-        keywordId={keywordContents.keywordId}
+        onClose={closeModal}
+        prevKeyword={editingKeyword}
       />
     </>
   );
