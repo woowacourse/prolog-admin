@@ -203,7 +203,7 @@ export const useAddKeyword = () => {
 
   return useMutation(addKeyword, {
     onSuccess(_, { sessionId }) {
-      queryClient.invalidateQueries([QUERY_KEY.childKeywordList, sessionId]);
+      queryClient.invalidateQueries([QUERY_KEY.topKeywordList, sessionId]);
     },
   });
 };
