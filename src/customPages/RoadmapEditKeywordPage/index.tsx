@@ -1,14 +1,16 @@
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { Button } from '@mui/material';
 import SubKeywordList from './components/SubKeywordList';
 import { KeywordModal } from './components/KeywordModal';
-import { KeywordResponse } from '../../hooks/roadmap';
+import { KeywordResponse, useGetTopKeywordList } from '../../hooks/roadmap';
 import useModal from '../../hooks/useModal';
 
 const RoadmapEditKeywordPage = () => {
+  const sessionId = Number(useParams().sessionId);
   const parentKeyword = useLocation().state as KeywordResponse;
   const { name, childrenKeywords, keywordId: parentKeywordId } = parentKeyword;
 
+  const { topKeywordList } = useGetTopKeywordList(Number(sessionId));
   const { open, openModal, closeModal } = useModal();
 
   return (
@@ -31,6 +33,7 @@ const RoadmapEditKeywordPage = () => {
       <KeywordModal
         open={open}
         onClose={closeModal}
+        keywordCount={topKeywordList?.length ?? 0}
         parentKeywordId={parentKeywordId}
       />
     </div>

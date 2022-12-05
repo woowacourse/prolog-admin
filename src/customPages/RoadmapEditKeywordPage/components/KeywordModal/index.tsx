@@ -5,7 +5,6 @@ import {
   KeywordResponse,
   useAddKeyword,
   useEditKeyword,
-  useGetTopKeywordList,
 } from '../../../../hooks/roadmap';
 import useInput from '../../../../hooks/useInput';
 import {
@@ -19,6 +18,7 @@ import CenterBox from '../../../common/CenterBox';
 export type KeywordModalProps = {
   open: boolean;
   onClose: () => void;
+  keywordCount?: number;
   prevKeyword?: KeywordResponse;
   parentKeywordId?: number | null;
 };
@@ -26,12 +26,12 @@ export type KeywordModalProps = {
 export const KeywordModal = ({
   open,
   onClose,
+  keywordCount,
   prevKeyword,
   parentKeywordId,
 }: KeywordModalProps) => {
   const sessionId = Number(useParams().sessionId);
 
-  const { topKeywordList } = useGetTopKeywordList(Number(sessionId));
   const { mutateAsync: addKeyword } = useAddKeyword();
   const { mutateAsync: editKeyword } = useEditKeyword();
 
@@ -45,7 +45,7 @@ export const KeywordModal = ({
     validateDescription
   );
   const order = useInput(
-    String(topKeywordList?.length ? topKeywordList?.length + 1 : 1),
+    String(prevKeyword?.order ?? keywordCount ?? 1),
     validateOrder
   );
 
