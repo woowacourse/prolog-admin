@@ -1,13 +1,17 @@
 import { useGetChildrenKeywordList } from '../../hooks/roadmap';
-import { useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import SubKeywordList from '../RoadmapEditKeywordPage/components/SubKeywordList';
 
 const RoadmapTopKeywordsPage = () => {
   const { sessionId, keywordId } = useParams();
-  const { childrenKeywordList } = useGetChildrenKeywordList({
+  const { childrenKeywordList, isError } = useGetChildrenKeywordList({
     sessionId: Number(sessionId),
     keywordId: Number(keywordId),
   });
+
+  if (isError) {
+    return <Navigate to={`/roadmap/${sessionId}`} />;
+  }
 
   return (
     <div>
