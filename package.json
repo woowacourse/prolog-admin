@@ -21,13 +21,20 @@
     "react-admin": "^4.2.6",
     "react-dom": "^18.2.0",
     "react-query": "^3.39.2",
+    "react-router-dom": "^6.4.3",
     "react-scripts": "5.0.1",
     "typescript": "^4.4.2",
     "web-vitals": "^2.1.0"
   },
   "scripts": {
     "start": "react-scripts start",
+    "start:local": "cp ./env/.env.local ./.env && cross-env NODE_ENV=local react-scripts start",
+    "start:dev": "cp ./env/.env.development ./.env && cross-env NODE_ENV=development react-scripts start",
+    "start:prd": "cp ./env/.env.production ./.env && cross-env NODE_ENV=production react-scripts start",
     "build": "react-scripts build",
+    "build:local": "cp ./env/.env.local ./.env && react-scripts build",
+    "build:dev": "cp ./env/.env.development ./.env && GENERATE_SOURCEMAP=false react-scripts build",
+    "build:prd": "cp ./env/.env.production ./.env && GENERATE_SOURCEMAP=false react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -52,7 +59,9 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.33.0",
     "@typescript-eslint/parser": "^5.33.0",
+    "cross-env": "^7.0.3",
     "eslint": "^8.21.0",
-    "eslint-plugin-react": "^7.30.1"
+    "eslint-plugin-react": "^7.30.1",
+    "prettier": "^2.7.1"
   }
 }

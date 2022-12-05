@@ -6,10 +6,16 @@ import Sessions from './components/Sessions';
 import SessionCreate from './components/SessionCreate';
 import Members from './components/Member';
 import { Route } from 'react-router-dom';
-
-import PopularStudylogsUpdate from './components/PopularStudylogsUpdate';
 import MyLayout from './components/Layout';
 import { BASE_URL } from './client';
+
+
+import PopularStudylogsUpdate from './customPages/PopularStudylogsUpdatePage';
+import RoadmapSelectSessionPage from './customPages/RoadmapSelectSessionPage';
+import RoadMapSelectTopKeywordPage from './customPages/RoadmapSelectTopKeywordPage';
+import RoadmapTopKeywordsPage from './customPages/RoadmapTopKeywordsPage';
+import RoadmapEditKeywordPage from './customPages/RoadmapEditKeywordPage';
+import RoadmapQuizsPage from './customPages/RoadmapQuizsPage';
 
 const dataProvider = jsonServerProvider(BASE_URL);
 
@@ -21,6 +27,23 @@ function App() {
       <CustomRoutes>
         <Route path="/members" element={<Members />} />
         <Route path="/studylogs" element={<PopularStudylogsUpdate />} />
+        <Route path="/roadmap" element={<RoadmapSelectSessionPage />} />
+        <Route
+          path="/roadmap/:sessionId"
+          element={<RoadMapSelectTopKeywordPage />}
+        />
+        <Route
+          path="/roadmap/:sessionId/:keywordId/quizs"
+          element={<RoadmapQuizsPage />}
+        />
+        <Route
+          path="/roadmap/:sessionId/:keywordId"
+          element={<RoadmapTopKeywordsPage />}
+        />
+        <Route
+          path="/roadmap/:sessionId/editSubKeywords"
+          element={<RoadmapEditKeywordPage />}
+        />
       </CustomRoutes>
     </Admin>
   );

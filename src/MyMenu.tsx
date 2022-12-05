@@ -3,6 +3,7 @@ import LabelIcon from '@mui/icons-material/Label';
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import WysiwygIcon from '@mui/icons-material/Wysiwyg';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import EditRoadIcon from '@mui/icons-material/EditRoad';
 
 const MyMenu = (props: any) => (
   <Menu {...props}>
@@ -21,6 +22,11 @@ const MyMenu = (props: any) => (
       to="/members"
       primaryText="멤버"
       leftIcon={<AccountCircleIcon />}
+    />
+    <Menu.Item
+      to="/roadmap"
+      primaryText="로드맵"
+      leftIcon={<EditRoadIcon />}
     />
   </Menu>
 );
