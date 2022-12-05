@@ -1,5 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useAtomValue } from 'jotai';
 import { client } from '../client';
+import { selectedKeywordIdAtom } from '../store/index';
 
 const QUERY_KEY = {
   sessions: 'sessions',
@@ -99,6 +101,36 @@ export const useGetChildrenKeywordList = ({
     childrenKeywordList: data,
     refetchChildrenKeywordList: refetch,
     isError,
+  };
+};
+
+export const useSelectedKeyword = ({
+  sessionId,
+  keywordId,
+}: ChildKeywordListRequest) => {
+  const selectedKeywordId = useAtomValue(selectedKeywordIdAtom);
+  const { data } = useQuery(
+    [QUERY_KEY.childKeywordList, sessionId, keywordId],
+    () =>
+      getChildKeywordList({
+        sessionId,
+        keywordId,
+      }),
+    {
+      select(data) {
+        return selectedKeywordId.reduce<KeywordResponse>(
+          (prev, currentKeywordId) =>
+            prev.childrenKeywords?.find(
+              (keyword) => keyword.keywordId === currentKeywordId
+            ) ?? data,
+          data
+        );
+      },
+    }
+  );
+
+  return {
+    selectedKeyword: data,
   };
 };
 

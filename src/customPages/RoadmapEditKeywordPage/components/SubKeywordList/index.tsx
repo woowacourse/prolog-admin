@@ -49,6 +49,10 @@ const SubKeywordList = ({ childrenKeywordList }: SubKeywordListProps) => {
     navigate(`/roadmap/${sessionId}/${item.keywordId}/quizs`, { state: item });
   };
 
+  if (childrenKeywordList.length === 0) {
+    return <></>;
+  }
+
   const columns = [
     '편집버튼',
     ...translateColumns(childrenKeywordList[0]),
@@ -100,7 +104,7 @@ const SubKeywordList = ({ childrenKeywordList }: SubKeywordListProps) => {
                     </Button>
                   </Stack>
                 </TableCell>
-                <CustomTableCell item={item} sessionId={sessionId} />
+                <CustomTableCell item={item} />
                 <TableCell>
                   <Button
                     variant="contained"

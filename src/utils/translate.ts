@@ -15,7 +15,9 @@ const columnNameTranslator = {
   question: '질문',
 };
 
-export const translateColumns = (obj: Record<PropertyKey, unknown>) => {
+export const translateColumns = (
+  obj: Record<PropertyKey, unknown>
+): string[] => {
   return Object.keys(obj).map(
     (key) => (columnNameTranslator as Record<string, string>)[key] ?? key
   );
