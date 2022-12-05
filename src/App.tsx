@@ -1,12 +1,11 @@
 import { Admin, CustomRoutes, Resource } from 'react-admin';
 import jsonServerProvider from 'ra-data-json-server';
-import MissionCreate from './components/MissionCreate';
-import Missions from './components/Missions';
-import Sessions from './components/Sessions';
-import SessionCreate from './components/SessionCreate';
-import Members from './components/Member';
+import MissionCreate from './reactAdminPages/MissionCreate';
+import Missions from './reactAdminPages/Missions';
+import Sessions from './reactAdminPages/Sessions';
+import SessionCreate from './reactAdminPages/SessionCreate';
 import { Route } from 'react-router-dom';
-import MyLayout from './components/Layout';
+import MyLayout from './Layout';
 import { BASE_URL } from './client';
 
 
@@ -16,6 +15,7 @@ import RoadMapSelectTopKeywordPage from './customPages/RoadmapSelectTopKeywordPa
 import RoadmapTopKeywordsPage from './customPages/RoadmapTopKeywordsPage';
 import RoadmapEditKeywordPage from './customPages/RoadmapEditKeywordPage';
 import RoadmapQuizsPage from './customPages/RoadmapQuizsPage';
+import Members from './reactAdminPages/Member';
 
 const dataProvider = jsonServerProvider(BASE_URL);
 

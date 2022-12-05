@@ -30,7 +30,7 @@ const columns: GridColDef[] = [
   },
 ];
 
-const Sessions = () => {
+const Members = () => {
   const { data: users, isLoading, isError } = useGetMembers();
 
   if (isLoading || isError) {
@@ -40,4 +40,4 @@ const Sessions = () => {
   return <DataGrid rows={users.data} columns={columns} />;
 };
 
-export default Sessions;
+export default Members;
