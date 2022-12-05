@@ -86,7 +86,7 @@ export const useGetChildrenKeywordList = ({
   sessionId,
   keywordId,
 }: ChildKeywordListRequest) => {
-  const { data, refetch } = useQuery(
+  const { data, refetch, isError } = useQuery(
     [QUERY_KEY.childKeywordList, sessionId, keywordId],
     () =>
       getChildKeywordList({
@@ -98,6 +98,7 @@ export const useGetChildrenKeywordList = ({
   return {
     childrenKeywordList: data,
     refetchChildrenKeywordList: refetch,
+    isError,
   };
 };
 
@@ -203,7 +204,7 @@ export const useAddKeyword = () => {
 
   return useMutation(addKeyword, {
     onSuccess(_, { sessionId }) {
-      queryClient.invalidateQueries([QUERY_KEY.childKeywordList, sessionId]);
+      queryClient.invalidateQueries([QUERY_KEY.topKeywordList, sessionId]);
     },
   });
 };

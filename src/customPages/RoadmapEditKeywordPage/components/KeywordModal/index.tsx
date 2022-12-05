@@ -5,6 +5,7 @@ import {
   KeywordResponse,
   useAddKeyword,
   useEditKeyword,
+  useGetTopKeywordList,
 } from '../../../../hooks/roadmap';
 import useInput from '../../../../hooks/useInput';
 import {
@@ -30,6 +31,7 @@ export const KeywordModal = ({
 }: KeywordModalProps) => {
   const sessionId = Number(useParams().sessionId);
 
+  const { topKeywordList } = useGetTopKeywordList(Number(sessionId));
   const { mutateAsync: addKeyword } = useAddKeyword();
   const { mutateAsync: editKeyword } = useEditKeyword();
 
@@ -42,7 +44,10 @@ export const KeywordModal = ({
     prevKeyword?.description ?? '',
     validateDescription
   );
-  const order = useInput('', validateOrder);
+  const order = useInput(
+    String(topKeywordList?.length ? topKeywordList?.length + 1 : 1),
+    validateOrder
+  );
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
