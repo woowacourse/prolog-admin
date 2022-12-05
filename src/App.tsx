@@ -33,12 +33,12 @@ function App() {
           element={<RoadmapQuizsPage />}
         />
         <Route
-          path="/roadmap/:sessionId/:keywordId"
-          element={<RoadmapTopKeywordsPage />}
+          path="/roadmap/:sessionId/:keywordId/editSubKeywords"
+          element={<RoadmapEditKeywordPage />}
         />
         <Route
-          path="/roadmap/:sessionId/editSubKeywords"
-          element={<RoadmapEditKeywordPage />}
+          path="/roadmap/:sessionId/:keywordId"
+          element={<RoadmapTopKeywordsPage />}
         />
       </CustomRoutes>
     </Admin>
