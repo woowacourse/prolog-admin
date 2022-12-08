@@ -1,21 +1,28 @@
-import { useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Button } from '@mui/material';
 import SubKeywordList from './components/SubKeywordList';
 import { KeywordModal } from './components/KeywordModal';
-import { KeywordResponse } from '../../hooks/roadmap';
+import { useGetTopKeywordList, useSelectedKeyword } from '../../hooks/roadmap';
 import useModal from '../../hooks/useModal';
 
 const RoadmapEditKeywordPage = () => {
-  const parentKeyword = useLocation().state as KeywordResponse;
-  const { name, childrenKeywords, keywordId: parentKeywordId } = parentKeyword;
+  const { sessionId, keywordId } = useParams();
 
+  const { selectedKeyword } = useSelectedKeyword({
+    sessionId: Number(sessionId),
+    keywordId: Number(keywordId),
+  });
+
+  const { topKeywordList } = useGetTopKeywordList(Number(sessionId));
   const { open, openModal, closeModal } = useModal();
 
   return (
     <div>
-      <h2>[{name}] 하위 키워드 수정/삭제</h2>
-      {childrenKeywords && (
-        <SubKeywordList childrenKeywordList={childrenKeywords} />
+      <h2>[{selectedKeyword?.name}] 하위 키워드 수정/삭제</h2>
+      {selectedKeyword && (
+        <SubKeywordList
+          childrenKeywordList={selectedKeyword?.childrenKeywords ?? []}
+        />
       )}
       <br />
       <Button
@@ -26,12 +33,13 @@ const RoadmapEditKeywordPage = () => {
         color="success"
         style={{ textTransform: 'unset' }} // prevent uppercase
       >
-        [{name}] 하위에 새 키워드 추가
+        [{selectedKeyword?.name}] 하위에 새 키워드 추가
       </Button>
       <KeywordModal
         open={open}
         onClose={closeModal}
-        parentKeywordId={parentKeywordId}
+        keywordCount={topKeywordList?.length ?? 0}
+        parentKeywordId={selectedKeyword?.keywordId}
       />
     </div>
   );
