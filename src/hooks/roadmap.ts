@@ -10,6 +10,26 @@ const QUERY_KEY = {
   childKeywordList: 'childKeywordList',
   quizListByKeyword: 'quizListByKeyword',
   deleteKeyword: 'deleteKeyword',
+  curriculums: 'curriculums',
+};
+
+type Curriculum = {
+  curriculumId: number;
+  name: string;
+};
+
+export const getCurriculums = async () => {
+  const response = await client.get<{ data: Curriculum[] }>('/curriculums');
+
+  return response.data;
+};
+
+export const useGetCurriculums = () => {
+  const { data } = useQuery([QUERY_KEY.curriculums], () => getCurriculums());
+
+  return {
+    curriculums: data?.data,
+  };
 };
 
 export const getSessions = async () => {
