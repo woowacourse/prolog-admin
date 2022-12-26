@@ -106,6 +106,58 @@ export const useGetSessions = (curriculumId: number) => {
   };
 };
 
+type SessionRequest = {
+  name: string;
+};
+
+export const addSession = async (body: SessionRequest) => {
+  const response = await client.put('/sessions', body);
+
+  return response.data;
+};
+
+export const useAddSessionMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(addSession, {
+    onSuccess() {
+      queryClient.invalidateQueries([QUERY_KEY.sessions]);
+    },
+  });
+};
+
+export const editSession = async (id: number, body: SessionRequest) => {
+  const response = await client.put(`/sessions/${id}`, body);
+
+  return response.data;
+};
+
+export const useEditSessionMutation = (id: number) => {
+  const queryClient = useQueryClient();
+
+  return useMutation((body: SessionRequest) => editSession(id, body), {
+    onSuccess() {
+      queryClient.invalidateQueries([QUERY_KEY.sessions]);
+    },
+  });
+};
+
+export const deleteSession = async (id: number) => {
+  const response = await client.delete(`/sessions/${id}`);
+
+  return response.data;
+};
+
+export const useDeleteSessionMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(deleteSession, {
+    onSuccess() {
+      queryClient.invalidateQueries([QUERY_KEY.sessions]);
+    },
+  });
+};
+
 // Keyword
 
 export const getKeyword = async ({ sessionId, keywordId }: KeywordRequest) => {
