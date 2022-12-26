@@ -8,14 +8,17 @@ import {
   Paper,
   Button,
 } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useGetSessions } from '../../../../hooks/roadmap';
 import { translateColumns } from '../../../../utils/translate';
 
 const SessionList = () => {
+  const params = useParams();
+  const curriculumId = Number(params.curriculumId);
+
   const navigate = useNavigate();
 
-  const { sessions } = useGetSessions();
+  const { sessions } = useGetSessions(curriculumId);
 
   const selectSession = (sessionId: number) => {
     navigate(`/roadmap/${sessionId}`);
@@ -44,7 +47,29 @@ const SessionList = () => {
                   {value}
                 </TableCell>
               ))}
-              <TableCell onClick={() => selectSession(row.id)} align="right">
+              <TableCell
+                onClick={() => selectSession(row.id)}
+                align="right"
+                sx={{ width: 0 }}
+              >
+                <Button variant="outlined" color="success">
+                  수정
+                </Button>
+              </TableCell>
+              <TableCell
+                onClick={() => selectSession(row.id)}
+                align="right"
+                sx={{ width: 0 }}
+              >
+                <Button variant="outlined" color="error">
+                  삭제
+                </Button>
+              </TableCell>
+              <TableCell
+                onClick={() => selectSession(row.id)}
+                align="right"
+                sx={{ width: 0 }}
+              >
                 <Button variant="contained">선택</Button>
               </TableCell>
             </TableRow>

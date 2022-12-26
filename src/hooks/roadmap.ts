@@ -88,14 +88,18 @@ export const useDeleteCurriculumMutation = () => {
 
 // Session
 
-export const getSessions = async () => {
-  const response = await client.get<Session[]>('/sessions');
+export const getSessions = async (curriculumId: number) => {
+  const response = await client.get<Session[]>(
+    `/curriculums/${curriculumId}/sessions`
+  );
 
   return response.data;
 };
 
-export const useGetSessions = () => {
-  const { data } = useQuery([QUERY_KEY.sessions], () => getSessions());
+export const useGetSessions = (curriculumId: number) => {
+  const { data } = useQuery([QUERY_KEY.sessions], () =>
+    getSessions(curriculumId)
+  );
 
   return {
     sessions: data,
