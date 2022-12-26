@@ -10,7 +10,83 @@ const QUERY_KEY = {
   childKeywordList: 'childKeywordList',
   quizListByKeyword: 'quizListByKeyword',
   deleteKeyword: 'deleteKeyword',
+  curriculums: 'curriculums',
 };
+
+// Curriculum
+
+export type Curriculum = {
+  curriculumId: number;
+  name: string;
+};
+
+export const getCurriculums = async () => {
+  const response = await client.get<{ data: Curriculum[] }>('/curriculums');
+
+  return response.data;
+};
+
+export const useGetCurriculums = () => {
+  const { data } = useQuery([QUERY_KEY.curriculums], () => getCurriculums());
+
+  return {
+    curriculums: data?.data,
+  };
+};
+
+type CurriculumRequest = {
+  name: string;
+};
+
+export const addCurriculum = async (body: CurriculumRequest) => {
+  const response = await client.put('/curriculums', body);
+
+  return response.data;
+};
+
+export const useAddCurriculumMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(addCurriculum, {
+    onSuccess() {
+      queryClient.invalidateQueries([QUERY_KEY.curriculums]);
+    },
+  });
+};
+
+export const editCurriculum = async (id: number, body: CurriculumRequest) => {
+  const response = await client.put(`/curriculums/${id}`, body);
+
+  return response.data;
+};
+
+export const useEditCurriculumMutation = (id: number) => {
+  const queryClient = useQueryClient();
+
+  return useMutation((body: CurriculumRequest) => editCurriculum(id, body), {
+    onSuccess() {
+      queryClient.invalidateQueries([QUERY_KEY.curriculums]);
+    },
+  });
+};
+
+export const deleteCurriculum = async (id: number) => {
+  const response = await client.delete(`/curriculums/${id}`);
+
+  return response.data;
+};
+
+export const useDeleteCurriculumMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(deleteCurriculum, {
+    onSuccess() {
+      queryClient.invalidateQueries([QUERY_KEY.curriculums]);
+    },
+  });
+};
+
+// Session
 
 export const getSessions = async () => {
   const response = await client.get<Session[]>('/sessions');
@@ -25,6 +101,8 @@ export const useGetSessions = () => {
     sessions: data,
   };
 };
+
+// Keyword
 
 export const getKeyword = async ({ sessionId, keywordId }: KeywordRequest) => {
   const response = await client.get<KeywordResponse>(
@@ -133,6 +211,8 @@ export const useSelectedKeyword = ({
     selectedKeyword: data,
   };
 };
+
+// Quiz
 
 // 10. [R] Keyword별 Quiz 목록 조회(public)
 export const getQuizListByKeyword = async ({

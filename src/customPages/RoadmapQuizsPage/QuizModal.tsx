@@ -60,7 +60,7 @@ const QuizModal = ({ open, onClose, prevQuiz }: QuizModalProps) => {
               value={question.value}
             />
           </div>
-          <button>키워드 추가</button>
+          <button>퀴즈 추가</button>
         </form>
       </CenterBox>
     </Modal>
