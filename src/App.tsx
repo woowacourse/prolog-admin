@@ -15,6 +15,7 @@ import RoadMapSelectTopKeywordPage from './customPages/RoadmapSelectTopKeywordPa
 import RoadmapTopKeywordsPage from './customPages/RoadmapTopKeywordsPage';
 import RoadmapEditKeywordPage from './customPages/RoadmapEditKeywordPage';
 import RoadmapQuizsPage from './customPages/RoadmapQuizsPage';
+import RoadmapSelectCurriculumPage from './customPages/RoadmapSelectCurriculumPage';
 import Members from './reactAdminPages/Member';
 
 const dataProvider = jsonServerProvider(BASE_URL);
@@ -27,7 +28,11 @@ function App() {
       <CustomRoutes>
         <Route path="/members" element={<Members />} />
         <Route path="/studylogs" element={<PopularStudylogsUpdate />} />
-        <Route path="/roadmap" element={<RoadmapSelectSessionPage />} />
+        <Route path="/roadmap" element={<RoadmapSelectCurriculumPage />} />
+        <Route
+          path="/roadmap/curriculum/:curriculimId"
+          element={<RoadmapSelectSessionPage />}
+        />
         <Route
           path="/roadmap/:sessionId"
           element={<RoadMapSelectTopKeywordPage />}

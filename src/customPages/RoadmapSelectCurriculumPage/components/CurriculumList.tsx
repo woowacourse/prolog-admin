@@ -30,7 +30,7 @@ const CurriculumList = () => {
   const { open, openModal, closeModal } = useModal();
 
   const selectCurriculum = (curriculumId: number) => {
-    navigate(`/roadmap/${curriculumId}`);
+    navigate(`/roadmap/curriculum/${curriculumId}`);
   };
 
   const columns = [...translateColumns(curriculums?.[0] ?? {})];
