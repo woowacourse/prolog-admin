@@ -1,5 +1,6 @@
 import { Modal, TextField } from '@mui/material';
 import { FormEvent } from 'react';
+import { useParams } from 'react-router-dom';
 import {
   useAddSessionMutation,
   useEditSessionMutation,
@@ -15,11 +16,15 @@ interface SessionModalProps {
 }
 
 const SessionModal = ({ open, onClose, prevSession }: SessionModalProps) => {
+  const params = useParams();
+  const curriculumId = Number(params.curriculumId);
+
   const name = useInput(prevSession?.name ?? '');
 
-  const { mutateAsync: addSession } = useAddSessionMutation();
+  const { mutateAsync: addSession } = useAddSessionMutation(curriculumId);
   // @FIXME: add 상황인 경우 임의로 -1 로 지정
   const { mutateAsync: editSession } = useEditSessionMutation(
+    curriculumId,
     prevSession?.id ?? -1
   );
 

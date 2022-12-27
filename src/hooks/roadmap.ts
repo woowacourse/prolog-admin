@@ -110,48 +110,69 @@ type SessionRequest = {
   name: string;
 };
 
-export const addSession = async (body: SessionRequest) => {
-  const response = await client.put('/sessions', body);
+// 백엔드와 상의후 불필요한 curriculumId 제거
+export const addSession = async (
+  curriculumId: number,
+  body: SessionRequest
+) => {
+  const response = await client.put(
+    `/curriculum/${curriculumId}/session`,
+    body
+  );
 
   return response.data;
 };
 
-export const useAddSessionMutation = () => {
+export const useAddSessionMutation = (curriculumId: number) => {
   const queryClient = useQueryClient();
 
-  return useMutation(addSession, {
+  return useMutation((body: SessionRequest) => addSession(curriculumId, body), {
     onSuccess() {
       queryClient.invalidateQueries([QUERY_KEY.sessions]);
     },
   });
 };
 
-export const editSession = async (id: number, body: SessionRequest) => {
-  const response = await client.put(`/sessions/${id}`, body);
+// 백엔드와 상의후 불필요한 curriculumId 제거
+export const editSession = async (
+  curriculumId: number,
+  id: number,
+  body: SessionRequest
+) => {
+  const response = await client.put(
+    `/curriculum/${curriculumId}/session/${id}`,
+    body
+  );
 
   return response.data;
 };
 
-export const useEditSessionMutation = (id: number) => {
+export const useEditSessionMutation = (id: number, curriculumId: number) => {
   const queryClient = useQueryClient();
 
-  return useMutation((body: SessionRequest) => editSession(id, body), {
-    onSuccess() {
-      queryClient.invalidateQueries([QUERY_KEY.sessions]);
-    },
-  });
+  return useMutation(
+    (body: SessionRequest) => editSession(curriculumId, id, body),
+    {
+      onSuccess() {
+        queryClient.invalidateQueries([QUERY_KEY.sessions]);
+      },
+    }
+  );
 };
 
-export const deleteSession = async (id: number) => {
-  const response = await client.delete(`/sessions/${id}`);
+// 백엔드와 상의후 불필요한 curriculumId 제거
+export const deleteSession = async (curriculumId: number, id: number) => {
+  const response = await client.delete(
+    `/curriculum/${curriculumId}/session/${id}`
+  );
 
   return response.data;
 };
 
-export const useDeleteSessionMutation = () => {
+export const useDeleteSessionMutation = (curriculumId: number) => {
   const queryClient = useQueryClient();
 
-  return useMutation(deleteSession, {
+  return useMutation((id: number) => deleteSession(curriculumId, id), {
     onSuccess() {
       queryClient.invalidateQueries([QUERY_KEY.sessions]);
     },

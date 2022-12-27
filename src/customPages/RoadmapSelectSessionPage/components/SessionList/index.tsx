@@ -26,7 +26,7 @@ const SessionList = () => {
   const navigate = useNavigate();
 
   const { sessions } = useGetSessions(curriculumId);
-  const { mutateAsync: deleteSession } = useDeleteSessionMutation();
+  const { mutateAsync: deleteSession } = useDeleteSessionMutation(curriculumId);
 
   const { open, openModal, closeModal } = useModal();
   const [editingSession, setEditingSession] = useState<Session>();
