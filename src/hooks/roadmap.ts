@@ -88,18 +88,95 @@ export const useDeleteCurriculumMutation = () => {
 
 // Session
 
-export const getSessions = async () => {
-  const response = await client.get<Session[]>('/sessions');
+export const getSessions = async (curriculumId: number) => {
+  const response = await client.get<Session[]>(
+    `/curriculums/${curriculumId}/sessions`
+  );
 
   return response.data;
 };
 
-export const useGetSessions = () => {
-  const { data } = useQuery([QUERY_KEY.sessions], () => getSessions());
+export const useGetSessions = (curriculumId: number) => {
+  const { data } = useQuery([QUERY_KEY.sessions], () =>
+    getSessions(curriculumId)
+  );
 
   return {
     sessions: data,
   };
+};
+
+type SessionRequest = {
+  name: string;
+};
+
+// 백엔드와 상의후 불필요한 curriculumId 제거
+export const addSession = async (
+  curriculumId: number,
+  body: SessionRequest
+) => {
+  const response = await client.put(
+    `/curriculum/${curriculumId}/session`,
+    body
+  );
+
+  return response.data;
+};
+
+export const useAddSessionMutation = (curriculumId: number) => {
+  const queryClient = useQueryClient();
+
+  return useMutation((body: SessionRequest) => addSession(curriculumId, body), {
+    onSuccess() {
+      queryClient.invalidateQueries([QUERY_KEY.sessions]);
+    },
+  });
+};
+
+// 백엔드와 상의후 불필요한 curriculumId 제거
+export const editSession = async (
+  curriculumId: number,
+  id: number,
+  body: SessionRequest
+) => {
+  const response = await client.put(
+    `/curriculum/${curriculumId}/session/${id}`,
+    body
+  );
+
+  return response.data;
+};
+
+export const useEditSessionMutation = (id: number, curriculumId: number) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    (body: SessionRequest) => editSession(curriculumId, id, body),
+    {
+      onSuccess() {
+        queryClient.invalidateQueries([QUERY_KEY.sessions]);
+      },
+    }
+  );
+};
+
+// 백엔드와 상의후 불필요한 curriculumId 제거
+export const deleteSession = async (curriculumId: number, id: number) => {
+  const response = await client.delete(
+    `/curriculum/${curriculumId}/session/${id}`
+  );
+
+  return response.data;
+};
+
+export const useDeleteSessionMutation = (curriculumId: number) => {
+  const queryClient = useQueryClient();
+
+  return useMutation((id: number) => deleteSession(curriculumId, id), {
+    onSuccess() {
+      queryClient.invalidateQueries([QUERY_KEY.sessions]);
+    },
+  });
 };
 
 // Keyword
