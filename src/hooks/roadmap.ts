@@ -10,21 +10,176 @@ const QUERY_KEY = {
   childKeywordList: 'childKeywordList',
   quizListByKeyword: 'quizListByKeyword',
   deleteKeyword: 'deleteKeyword',
+  curriculums: 'curriculums',
 };
 
-export const getSessions = async () => {
-  const response = await client.get<Session[]>('/sessions');
+// Curriculum
+
+export type Curriculum = {
+  curriculumId: number;
+  name: string;
+};
+
+export const getCurriculums = async () => {
+  const response = await client.get<{ data: Curriculum[] }>('/curriculums');
 
   return response.data;
 };
 
-export const useGetSessions = () => {
-  const { data } = useQuery([QUERY_KEY.sessions], () => getSessions());
+export const useGetCurriculums = () => {
+  const { data } = useQuery([QUERY_KEY.curriculums], () => getCurriculums());
+
+  return {
+    curriculums: data?.data,
+  };
+};
+
+type CurriculumRequest = {
+  name: string;
+};
+
+export const addCurriculum = async (body: CurriculumRequest) => {
+  const response = await client.put('/curriculums', body);
+
+  return response.data;
+};
+
+export const useAddCurriculumMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(addCurriculum, {
+    onSuccess() {
+      queryClient.invalidateQueries([QUERY_KEY.curriculums]);
+    },
+  });
+};
+
+export const editCurriculum = async (id: number, body: CurriculumRequest) => {
+  const response = await client.put(`/curriculums/${id}`, body);
+
+  return response.data;
+};
+
+export const useEditCurriculumMutation = (id: number) => {
+  const queryClient = useQueryClient();
+
+  return useMutation((body: CurriculumRequest) => editCurriculum(id, body), {
+    onSuccess() {
+      queryClient.invalidateQueries([QUERY_KEY.curriculums]);
+    },
+  });
+};
+
+export const deleteCurriculum = async (id: number) => {
+  const response = await client.delete(`/curriculums/${id}`);
+
+  return response.data;
+};
+
+export const useDeleteCurriculumMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(deleteCurriculum, {
+    onSuccess() {
+      queryClient.invalidateQueries([QUERY_KEY.curriculums]);
+    },
+  });
+};
+
+// Session
+
+export const getSessions = async (curriculumId: number) => {
+  const response = await client.get<Session[]>(
+    `/curriculums/${curriculumId}/sessions`
+  );
+
+  return response.data;
+};
+
+export const useGetSessions = (curriculumId: number) => {
+  const { data } = useQuery([QUERY_KEY.sessions], () =>
+    getSessions(curriculumId)
+  );
 
   return {
     sessions: data,
   };
 };
+
+type SessionRequest = {
+  name: string;
+};
+
+// 백엔드와 상의후 불필요한 curriculumId 제거
+export const addSession = async (
+  curriculumId: number,
+  body: SessionRequest
+) => {
+  const response = await client.put(
+    `/curriculum/${curriculumId}/session`,
+    body
+  );
+
+  return response.data;
+};
+
+export const useAddSessionMutation = (curriculumId: number) => {
+  const queryClient = useQueryClient();
+
+  return useMutation((body: SessionRequest) => addSession(curriculumId, body), {
+    onSuccess() {
+      queryClient.invalidateQueries([QUERY_KEY.sessions]);
+    },
+  });
+};
+
+// 백엔드와 상의후 불필요한 curriculumId 제거
+export const editSession = async (
+  curriculumId: number,
+  id: number,
+  body: SessionRequest
+) => {
+  const response = await client.put(
+    `/curriculum/${curriculumId}/session/${id}`,
+    body
+  );
+
+  return response.data;
+};
+
+export const useEditSessionMutation = (id: number, curriculumId: number) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    (body: SessionRequest) => editSession(curriculumId, id, body),
+    {
+      onSuccess() {
+        queryClient.invalidateQueries([QUERY_KEY.sessions]);
+      },
+    }
+  );
+};
+
+// 백엔드와 상의후 불필요한 curriculumId 제거
+export const deleteSession = async (curriculumId: number, id: number) => {
+  const response = await client.delete(
+    `/curriculum/${curriculumId}/session/${id}`
+  );
+
+  return response.data;
+};
+
+export const useDeleteSessionMutation = (curriculumId: number) => {
+  const queryClient = useQueryClient();
+
+  return useMutation((id: number) => deleteSession(curriculumId, id), {
+    onSuccess() {
+      queryClient.invalidateQueries([QUERY_KEY.sessions]);
+    },
+  });
+};
+
+// Keyword
 
 export const getKeyword = async ({ sessionId, keywordId }: KeywordRequest) => {
   const response = await client.get<KeywordResponse>(
@@ -133,6 +288,8 @@ export const useSelectedKeyword = ({
     selectedKeyword: data,
   };
 };
+
+// Quiz
 
 // 10. [R] Keyword별 Quiz 목록 조회(public)
 export const getQuizListByKeyword = async ({

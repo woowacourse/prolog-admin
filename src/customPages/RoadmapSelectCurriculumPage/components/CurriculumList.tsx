@@ -9,33 +9,31 @@ import {
   Button,
 } from '@mui/material';
 import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
-  type Session,
-  useGetSessions,
-  useDeleteSessionMutation,
-} from '../../../../hooks/roadmap';
-import useModal from '../../../../hooks/useModal';
-import { translateColumns } from '../../../../utils/translate';
-import SessionModal from '../SessionModal';
+  Curriculum,
+  useDeleteCurriculumMutation,
+  useGetCurriculums,
+} from '../../../hooks/roadmap';
+import useModal from '../../../hooks/useModal';
+import { translateColumns } from '../../../utils/translate';
+import CurriculumModal from './CurriculumModal';
 
-const SessionList = () => {
-  const params = useParams();
-  const curriculumId = Number(params.curriculumId);
-
+const CurriculumList = () => {
   const navigate = useNavigate();
 
-  const { sessions } = useGetSessions(curriculumId);
-  const { mutateAsync: deleteSession } = useDeleteSessionMutation(curriculumId);
+  const { curriculums } = useGetCurriculums();
+  const { mutateAsync: deleteCurriculum } = useDeleteCurriculumMutation();
+
+  const [editingCurriculum, setEditingCurriculum] = useState<Curriculum>();
 
   const { open, openModal, closeModal } = useModal();
-  const [editingSession, setEditingSession] = useState<Session>();
 
-  const selectSession = (sessionId: number) => {
-    navigate(`/roadmap/${sessionId}`);
+  const selectCurriculum = (curriculumId: number) => {
+    navigate(`/roadmap/curriculum/${curriculumId}`);
   };
 
-  const columns = [...translateColumns(sessions?.[0] ?? {})];
+  const columns = [...translateColumns(curriculums?.[0] ?? {})];
 
   return (
     <>
@@ -49,9 +47,9 @@ const SessionList = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {sessions?.map((row) => (
+            {curriculums?.map((row) => (
               <TableRow
-                key={row.id}
+                key={row.curriculumId}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
                 {Object.values(row).map((value, index) => (
@@ -62,7 +60,7 @@ const SessionList = () => {
                 <TableCell
                   onClick={() => {
                     openModal();
-                    setEditingSession(row);
+                    setEditingCurriculum(row);
                   }}
                   align="right"
                   sx={{ width: 0 }}
@@ -72,7 +70,7 @@ const SessionList = () => {
                   </Button>
                 </TableCell>
                 <TableCell
-                  onClick={() => deleteSession(row.id)}
+                  onClick={() => deleteCurriculum(row.curriculumId)}
                   align="right"
                   sx={{ width: 0 }}
                 >
@@ -81,9 +79,8 @@ const SessionList = () => {
                   </Button>
                 </TableCell>
                 <TableCell
-                  onClick={() => selectSession(row.id)}
+                  onClick={() => selectCurriculum(row.curriculumId)}
                   align="right"
-                  sx={{ width: 0 }}
                 >
                   <Button variant="contained">선택</Button>
                 </TableCell>
@@ -92,13 +89,13 @@ const SessionList = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      <SessionModal
+      <CurriculumModal
         open={open}
         onClose={closeModal}
-        prevSession={editingSession}
+        prevCurriculum={editingCurriculum}
       />
     </>
   );
 };
 
-export default SessionList;
+export default CurriculumList;
