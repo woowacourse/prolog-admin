@@ -45,12 +45,15 @@ const RoadmapEditKeywordPage = () => {
       >
         [{selectedKeyword?.name}] 하위에 새 키워드 추가
       </Button>
-      <KeywordModal
-        open={open}
-        onClose={closeModal}
-        keywordCount={topKeywordList?.length ?? 0}
-        parentKeywordId={selectedKeyword?.keywordId}
-      />
+      {/* 상태 초기화를 위하여 open 조건문 추가 */}
+      {open && (
+        <KeywordModal
+          open={open}
+          onClose={closeModal}
+          keywordCount={topKeywordList?.length ?? 0}
+          parentKeywordId={selectedKeyword?.keywordId}
+        />
+      )}
     </div>
   );
 };

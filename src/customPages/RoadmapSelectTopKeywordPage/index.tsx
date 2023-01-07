@@ -1,7 +1,7 @@
-import TopKeywordList from './components/TopKeywordList';
 import { Button } from '@mui/material';
 import useModal from '../../hooks/useModal';
 import { KeywordModal } from '../RoadmapEditKeywordPage/components/KeywordModal';
+import TopKeywordList from './components/TopKeywordList';
 
 const RoadMapSelectTopKeywordPage = () => {
   const { open, openModal, closeModal } = useModal();
@@ -20,7 +20,10 @@ const RoadMapSelectTopKeywordPage = () => {
       >
         최상위 키워드 추가
       </Button>
-      <KeywordModal open={open} onClose={closeModal} parentKeywordId={null} />
+      {/* 상태 초기화를 위하여 open 조건문 추가 */}
+      {open && (
+        <KeywordModal open={open} onClose={closeModal} parentKeywordId={null} />
+      )}
     </div>
   );
 };

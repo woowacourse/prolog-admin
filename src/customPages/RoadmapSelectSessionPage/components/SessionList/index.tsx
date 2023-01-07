@@ -100,11 +100,14 @@ const SessionList = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      <SessionModal
-        open={open}
-        onClose={closeModal}
-        prevSession={editingSession}
-      />
+      {/* 상태 초기화를 위하여 open 조건문 추가 */}
+      {open && (
+        <SessionModal
+          open={open}
+          onClose={closeModal}
+          prevSession={editingSession}
+        />
+      )}
     </>
   );
 };

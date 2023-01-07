@@ -19,7 +19,8 @@ const RoadmapSelectCurriculumPage = () => {
       >
         커리큘럼 추가
       </Button>
-      <CurriculumModal open={open} onClose={closeModal} />
+      {/* 상태 초기화를 위하여 open 조건문 추가 */}
+      {open && <CurriculumModal open={open} onClose={closeModal} />}
     </div>
   );
 };
