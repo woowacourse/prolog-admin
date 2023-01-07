@@ -24,8 +24,8 @@ const SessionModal = ({ open, onClose, prevSession }: SessionModalProps) => {
   const { mutateAsync: addSession } = useAddSessionMutation(curriculumId);
   // @FIXME: add 상황인 경우 임의로 -1 로 지정
   const { mutateAsync: editSession } = useEditSessionMutation(
-    curriculumId,
-    prevSession?.sessionId ?? -1
+    prevSession?.sessionId ?? -1,
+    curriculumId
   );
 
   const clearAllValue = () => {
