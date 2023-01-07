@@ -39,7 +39,7 @@ type CurriculumRequest = {
 };
 
 export const addCurriculum = async (body: CurriculumRequest) => {
-  const response = await client.put('/curriculums', body);
+  const response = await client.post('/curriculums', body);
 
   return response.data;
 };
