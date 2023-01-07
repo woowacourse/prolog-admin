@@ -37,8 +37,6 @@ const SessionList = () => {
 
   const columns = [...translateColumns(sessions?.[0] ?? {})];
 
-  console.log('sessions', sessions);
-
   return (
     <>
       <TableContainer component={Paper}>
@@ -74,7 +72,11 @@ const SessionList = () => {
                   </Button>
                 </TableCell>
                 <TableCell
-                  onClick={() => deleteSession(row.sessionId)}
+                  onClick={() => {
+                    if (window.confirm('세션을 삭제하시겠습니까?')) {
+                      deleteSession(row.sessionId);
+                    }
+                  }}
                   align="right"
                   sx={{ width: 0 }}
                 >
@@ -83,10 +85,7 @@ const SessionList = () => {
                   </Button>
                 </TableCell>
                 <TableCell
-                  onClick={() => {
-                    console.log('row', row);
-                    selectSession(row.sessionId);
-                  }}
+                  onClick={() => selectSession(row.sessionId)}
                   align="right"
                   sx={{ width: 0 }}
                 >

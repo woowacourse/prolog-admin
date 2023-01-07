@@ -70,7 +70,11 @@ const CurriculumList = () => {
                   </Button>
                 </TableCell>
                 <TableCell
-                  onClick={() => deleteCurriculum(row.id)}
+                  onClick={() => {
+                    if (window.confirm('커리큘럼을 삭제하시겠습니까?')) {
+                      deleteCurriculum(row.id);
+                    }
+                  }}
                   align="right"
                   sx={{ width: 0 }}
                 >
