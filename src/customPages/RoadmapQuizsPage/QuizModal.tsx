@@ -24,6 +24,10 @@ const QuizModal = ({ open, onClose, prevQuiz }: QuizModalProps) => {
     keywordId: Number(keywordId),
   });
 
+  const clearAllValue = () => {
+    question.setValue('');
+  };
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -38,6 +42,7 @@ const QuizModal = ({ open, onClose, prevQuiz }: QuizModalProps) => {
     }
 
     onClose();
+    clearAllValue();
   };
 
   return (
@@ -60,7 +65,7 @@ const QuizModal = ({ open, onClose, prevQuiz }: QuizModalProps) => {
               value={question.value}
             />
           </div>
-          <button>퀴즈 추가</button>
+          <button>퀴즈 {prevQuiz ? '수정' : '추가'}</button>
         </form>
       </CenterBox>
     </Modal>

@@ -25,8 +25,12 @@ const SessionModal = ({ open, onClose, prevSession }: SessionModalProps) => {
   // @FIXME: add 상황인 경우 임의로 -1 로 지정
   const { mutateAsync: editSession } = useEditSessionMutation(
     curriculumId,
-    prevSession?.id ?? -1
+    prevSession?.sessionId ?? -1
   );
+
+  const clearAllValue = () => {
+    name.setValue('');
+  };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -46,6 +50,7 @@ const SessionModal = ({ open, onClose, prevSession }: SessionModalProps) => {
     }
 
     onClose();
+    clearAllValue();
   };
 
   return (
@@ -68,7 +73,7 @@ const SessionModal = ({ open, onClose, prevSession }: SessionModalProps) => {
               value={name.value}
             />
           </div>
-          <button>세션 추가</button>
+          <button>세션 {prevSession ? '수정' : '추가'}</button>
         </form>
       </CenterBox>
     </Modal>
