@@ -23,7 +23,6 @@ const MyMenu = (props: any) => (
       leftIcon={<AccountCircleIcon />}
     />
     <Menu.Item to="/roadmap" primaryText="로드맵" leftIcon={<EditRoadIcon />} />
-    <Menu.Item to="/roadmap" primaryText="로드맵" leftIcon={<EditRoadIcon />} />
   </Menu>
 );
 
