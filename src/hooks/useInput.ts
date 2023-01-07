@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react';
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { ValidatorFunction } from '../utils/validator';
 
 const useInput = (
@@ -36,7 +35,7 @@ const useInput = (
     setValue(value);
   };
 
-  return { value, onChange, isValidated, message };
+  return { value, onChange, isValidated, message, setValue };
 };
 
 export default useInput;

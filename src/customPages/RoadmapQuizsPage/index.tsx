@@ -1,8 +1,8 @@
+import { Button } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 import { KeywordResponse } from '../../hooks/roadmap';
-import { Button } from '@mui/material';
-import QuizList from './QuizList';
 import useModal from '../../hooks/useModal';
+import QuizList from './QuizList';
 import QuizModal from './QuizModal';
 
 const RoadmapQuizsPage = () => {
@@ -24,7 +24,8 @@ const RoadmapQuizsPage = () => {
       >
         퀴즈 추가하기
       </Button>
-      <QuizModal open={open} onClose={closeModal} />
+      {/* 상태 초기화를 위하여 open 조건문 추가 */}
+      {open && <QuizModal open={open} onClose={closeModal} />}
     </div>
   );
 };

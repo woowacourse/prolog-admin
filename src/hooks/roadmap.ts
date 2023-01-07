@@ -1,7 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useAtomValue } from 'jotai';
 import { client } from '../client';
-import { selectedKeywordIdAtom } from '../store/index';
 
 const QUERY_KEY = {
   sessions: 'sessions',
@@ -16,7 +14,7 @@ const QUERY_KEY = {
 // Curriculum
 
 export type Curriculum = {
-  curriculumId: number;
+  id: number;
   name: string;
 };
 
@@ -89,7 +87,7 @@ export const useDeleteCurriculumMutation = () => {
 // Session
 
 export const getSessions = async (curriculumId: number) => {
-  const response = await client.get<Session[]>(
+  const response = await client.get<{ sessions: Session[] }>(
     `/curriculums/${curriculumId}/sessions`
   );
 
@@ -102,7 +100,7 @@ export const useGetSessions = (curriculumId: number) => {
   );
 
   return {
-    sessions: data,
+    sessions: data?.sessions,
   };
 };
 
@@ -115,8 +113,8 @@ export const addSession = async (
   curriculumId: number,
   body: SessionRequest
 ) => {
-  const response = await client.put(
-    `/curriculum/${curriculumId}/session`,
+  const response = await client.post(
+    `/curriculums/${curriculumId}/sessions`,
     body
   );
 
@@ -140,7 +138,7 @@ export const editSession = async (
   body: SessionRequest
 ) => {
   const response = await client.put(
-    `/curriculum/${curriculumId}/session/${id}`,
+    `/curriculums/${curriculumId}/sessions/${id}`,
     body
   );
 
@@ -163,7 +161,7 @@ export const useEditSessionMutation = (id: number, curriculumId: number) => {
 // 백엔드와 상의후 불필요한 curriculumId 제거
 export const deleteSession = async (curriculumId: number, id: number) => {
   const response = await client.delete(
-    `/curriculum/${curriculumId}/session/${id}`
+    `/curriculums/${curriculumId}/sessions/${id}`
   );
 
   return response.data;
@@ -244,7 +242,7 @@ export const useGetChildrenKeywordList = ({
   keywordId,
 }: ChildKeywordListRequest) => {
   const { data, refetch, isError } = useQuery(
-    [QUERY_KEY.childKeywordList, sessionId, keywordId],
+    [QUERY_KEY.childKeywordList, sessionId],
     () =>
       getChildKeywordList({
         sessionId,
@@ -259,13 +257,31 @@ export const useGetChildrenKeywordList = ({
   };
 };
 
+const normalizeKeyword = (topKeyword: KeywordResponse) => {
+  const result: KeywordResponse[] = [];
+  result.push(topKeyword);
+
+  const pushAllChildren = (keyword: KeywordResponse) => {
+    keyword.childrenKeywords?.forEach((k) => {
+      result.push(k);
+      if (k.childrenKeywords) {
+        pushAllChildren(k);
+      }
+    });
+  };
+
+  pushAllChildren(topKeyword);
+
+  return result;
+};
+
 export const useSelectedKeyword = ({
   sessionId,
   keywordId,
-}: ChildKeywordListRequest) => {
-  const selectedKeywordId = useAtomValue(selectedKeywordIdAtom);
+  selectedKeywordId,
+}: ChildKeywordListRequest & { selectedKeywordId: number }) => {
   const { data } = useQuery(
-    [QUERY_KEY.childKeywordList, sessionId, keywordId],
+    [QUERY_KEY.childKeywordList, sessionId],
     () =>
       getChildKeywordList({
         sessionId,
@@ -273,16 +289,18 @@ export const useSelectedKeyword = ({
       }),
     {
       select(data) {
-        return selectedKeywordId.reduce<KeywordResponse>(
-          (prev, currentKeywordId) =>
-            prev.childrenKeywords?.find(
-              (keyword) => keyword.keywordId === currentKeywordId
-            ) ?? data,
-          data
+        const normarlizedKeywordList = normalizeKeyword(data);
+
+        console.log('normarlizedKeywordList', normarlizedKeywordList);
+        console.log('selectedKeywordId', selectedKeywordId);
+
+        return normarlizedKeywordList.find(
+          (k) => k.keywordId === selectedKeywordId
         );
       },
     }
   );
+  // 발견할 때 까지 찾는다.
 
   return {
     selectedKeyword: data,
@@ -329,12 +347,9 @@ export const useDeleteKeyword = () => {
   const queryClient = useQueryClient();
 
   return useMutation(deleteKeyword, {
-    onSuccess(_, { sessionId, keywordId }) {
-      queryClient.invalidateQueries([
-        QUERY_KEY.childKeywordList,
-        sessionId,
-        keywordId,
-      ]);
+    onSuccess(_, { sessionId }) {
+      console.log([QUERY_KEY.childKeywordList, sessionId]);
+      queryClient.invalidateQueries([QUERY_KEY.childKeywordList, sessionId]);
     },
   });
 };
@@ -361,12 +376,8 @@ export const useEditKeyword = () => {
   const queryClient = useQueryClient();
 
   return useMutation(editKeyword, {
-    onSuccess(_, { sessionId, keywordId }) {
-      queryClient.invalidateQueries([
-        QUERY_KEY.childKeywordList,
-        sessionId,
-        keywordId,
-      ]);
+    onSuccess(_, { sessionId }) {
+      queryClient.invalidateQueries([QUERY_KEY.childKeywordList, sessionId]);
     },
   });
 };
@@ -394,6 +405,7 @@ export const useAddKeyword = () => {
   return useMutation(addKeyword, {
     onSuccess(_, { sessionId }) {
       queryClient.invalidateQueries([QUERY_KEY.topKeywordList, sessionId]);
+      queryClient.invalidateQueries([QUERY_KEY.childKeywordList, sessionId]);
     },
   });
 };
@@ -515,7 +527,7 @@ export const useDeleteQuiz = ({
 // 타입
 // Request
 export type Session = {
-  id: number;
+  sessionId: number;
   name: string;
 };
 

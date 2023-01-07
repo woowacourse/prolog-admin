@@ -24,8 +24,12 @@ const CurriculumModal = ({
   const { mutateAsync: addCurriculum } = useAddCurriculumMutation();
   // @FIXME: add 상황인 경우 임의로 -1 로 지정
   const { mutateAsync: editCurriculum } = useEditCurriculumMutation(
-    prevCurriculum?.curriculumId ?? -1
+    prevCurriculum?.id ?? -1
   );
+
+  const clearAllValue = () => {
+    name.setValue('');
+  };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -45,6 +49,7 @@ const CurriculumModal = ({
     }
 
     onClose();
+    clearAllValue();
   };
 
   return (
@@ -67,7 +72,7 @@ const CurriculumModal = ({
               value={name.value}
             />
           </div>
-          <button>커리큘럼 추가</button>
+          <button>커리큘럼 {prevCurriculum ? '수정' : '추가'}</button>
         </form>
       </CenterBox>
     </Modal>

@@ -1,5 +1,5 @@
-import { useGetChildrenKeywordList } from '../../hooks/roadmap';
 import { Navigate, useParams } from 'react-router-dom';
+import { useGetChildrenKeywordList } from '../../hooks/roadmap';
 import SubKeywordList from '../RoadmapEditKeywordPage/components/SubKeywordList';
 
 const RoadmapTopKeywordsPage = () => {
@@ -17,7 +17,7 @@ const RoadmapTopKeywordsPage = () => {
     <div>
       <h2>최상위 키워드 수정/삭제</h2>
       {childrenKeywordList && (
-        <SubKeywordList childrenKeywordList={[childrenKeywordList]} />
+        <SubKeywordList childrenKeywordList={[childrenKeywordList]} depth={1} />
       )}
       <br />
     </div>

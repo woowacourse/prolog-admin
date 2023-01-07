@@ -1,19 +1,19 @@
 import {
+  Button,
+  Paper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
-  Button,
 } from '@mui/material';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
-  type Session,
-  useGetSessions,
   useDeleteSessionMutation,
+  useGetSessions,
+  type Session,
 } from '../../../../hooks/roadmap';
 import useModal from '../../../../hooks/useModal';
 import { translateColumns } from '../../../../utils/translate';
@@ -51,7 +51,7 @@ const SessionList = () => {
           <TableBody>
             {sessions?.map((row) => (
               <TableRow
-                key={row.id}
+                key={row.sessionId}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
                 {Object.values(row).map((value, index) => (
@@ -72,7 +72,15 @@ const SessionList = () => {
                   </Button>
                 </TableCell>
                 <TableCell
-                  onClick={() => deleteSession(row.id)}
+                  onClick={() => {
+                    if (
+                      window.confirm(
+                        '세션을 삭제하면 하위 모든 자료가 제거됩니다. 정말 삭제하시겠습니까?'
+                      )
+                    ) {
+                      deleteSession(row.sessionId);
+                    }
+                  }}
                   align="right"
                   sx={{ width: 0 }}
                 >
@@ -81,7 +89,7 @@ const SessionList = () => {
                   </Button>
                 </TableCell>
                 <TableCell
-                  onClick={() => selectSession(row.id)}
+                  onClick={() => selectSession(row.sessionId)}
                   align="right"
                   sx={{ width: 0 }}
                 >
@@ -92,11 +100,14 @@ const SessionList = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      <SessionModal
-        open={open}
-        onClose={closeModal}
-        prevSession={editingSession}
-      />
+      {/* 상태 초기화를 위하여 open 조건문 추가 */}
+      {open && (
+        <SessionModal
+          open={open}
+          onClose={closeModal}
+          prevSession={editingSession}
+        />
+      )}
     </>
   );
 };
