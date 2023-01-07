@@ -71,7 +71,11 @@ const CurriculumList = () => {
                 </TableCell>
                 <TableCell
                   onClick={() => {
-                    if (window.confirm('커리큘럼을 삭제하시겠습니까?')) {
+                    if (
+                      window.confirm(
+                        '커리큘럼을 삭제하면 하위 모든 자료가 제거됩니다. 정말 삭제하시겠습니까?'
+                      )
+                    ) {
                       deleteCurriculum(row.id);
                     }
                   }}
