@@ -1,6 +1,6 @@
-import CurriculumList from './components/CurriculumList';
 import { Button } from '@mui/material';
 import useModal from '../../hooks/useModal';
+import CurriculumList from './components/CurriculumList';
 import CurriculumModal from './components/CurriculumModal';
 
 const RoadmapSelectCurriculumPage = () => {

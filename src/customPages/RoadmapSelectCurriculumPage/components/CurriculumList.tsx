@@ -1,12 +1,12 @@
 import {
+  Button,
+  Paper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
-  Button,
 } from '@mui/material';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -49,7 +49,7 @@ const CurriculumList = () => {
           <TableBody>
             {curriculums?.map((row) => (
               <TableRow
-                key={row.curriculumId}
+                key={row.id}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
                 {Object.values(row).map((value, index) => (
@@ -70,7 +70,7 @@ const CurriculumList = () => {
                   </Button>
                 </TableCell>
                 <TableCell
-                  onClick={() => deleteCurriculum(row.curriculumId)}
+                  onClick={() => deleteCurriculum(row.id)}
                   align="right"
                   sx={{ width: 0 }}
                 >
@@ -79,7 +79,10 @@ const CurriculumList = () => {
                   </Button>
                 </TableCell>
                 <TableCell
-                  onClick={() => selectCurriculum(row.curriculumId)}
+                  onClick={() => {
+                    console.log('row', row);
+                    selectCurriculum(row.id);
+                  }}
                   align="right"
                 >
                   <Button variant="contained">선택</Button>

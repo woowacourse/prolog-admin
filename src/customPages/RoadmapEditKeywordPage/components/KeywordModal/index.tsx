@@ -9,8 +9,8 @@ import {
 import useInput from '../../../../hooks/useInput';
 import {
   validateDescription,
-  validateName,
   validateImportance,
+  validateName,
   validateOrder,
 } from '../../../../utils/validator';
 import CenterBox from '../../../common/CenterBox';
@@ -49,6 +49,13 @@ export const KeywordModal = ({
     validateOrder
   );
 
+  const clearAllValue = () => {
+    name.setValue('');
+    importance.setValue('');
+    description.setValue('');
+    order.setValue('');
+  };
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -76,6 +83,7 @@ export const KeywordModal = ({
         });
       }
       onClose();
+      clearAllValue();
     }
   };
 

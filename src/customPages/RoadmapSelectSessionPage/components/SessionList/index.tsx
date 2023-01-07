@@ -1,19 +1,19 @@
 import {
+  Button,
+  Paper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
-  Button,
 } from '@mui/material';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
-  type Session,
-  useGetSessions,
   useDeleteSessionMutation,
+  useGetSessions,
+  type Session,
 } from '../../../../hooks/roadmap';
 import useModal from '../../../../hooks/useModal';
 import { translateColumns } from '../../../../utils/translate';
@@ -37,6 +37,8 @@ const SessionList = () => {
 
   const columns = [...translateColumns(sessions?.[0] ?? {})];
 
+  console.log('sessions', sessions);
+
   return (
     <>
       <TableContainer component={Paper}>
@@ -51,7 +53,7 @@ const SessionList = () => {
           <TableBody>
             {sessions?.map((row) => (
               <TableRow
-                key={row.id}
+                key={row.sessionId}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
                 {Object.values(row).map((value, index) => (
@@ -72,7 +74,7 @@ const SessionList = () => {
                   </Button>
                 </TableCell>
                 <TableCell
-                  onClick={() => deleteSession(row.id)}
+                  onClick={() => deleteSession(row.sessionId)}
                   align="right"
                   sx={{ width: 0 }}
                 >
@@ -81,7 +83,10 @@ const SessionList = () => {
                   </Button>
                 </TableCell>
                 <TableCell
-                  onClick={() => selectSession(row.id)}
+                  onClick={() => {
+                    console.log('row', row);
+                    selectSession(row.sessionId);
+                  }}
                   align="right"
                   sx={{ width: 0 }}
                 >

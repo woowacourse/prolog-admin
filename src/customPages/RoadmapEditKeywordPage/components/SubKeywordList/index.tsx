@@ -1,27 +1,31 @@
-import { useState } from 'react';
 import {
+  Button,
+  Paper,
+  Stack,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
-  Button,
-  Stack,
 } from '@mui/material';
-import { KeywordResponse, useDeleteKeyword } from '../../../../hooks/roadmap';
-import { KeywordModal } from '../KeywordModal';
-import { CustomTableCell } from '../CustomTableCell';
+import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { KeywordResponse, useDeleteKeyword } from '../../../../hooks/roadmap';
 import useModal from '../../../../hooks/useModal';
 import { translateColumns } from '../../../../utils/translate';
+import { CustomTableCell } from '../CustomTableCell';
+import { KeywordModal } from '../KeywordModal';
 
 export type SubKeywordListProps = {
   childrenKeywordList: KeywordResponse[];
+  depth: number;
 };
 
-const SubKeywordList = ({ childrenKeywordList }: SubKeywordListProps) => {
+const SubKeywordList = ({
+  childrenKeywordList,
+  depth,
+}: SubKeywordListProps) => {
   const sessionId = Number(useParams().sessionId);
   const navigate = useNavigate();
 
@@ -104,7 +108,7 @@ const SubKeywordList = ({ childrenKeywordList }: SubKeywordListProps) => {
                     </Button>
                   </Stack>
                 </TableCell>
-                <CustomTableCell item={item} />
+                <CustomTableCell item={item} depth={depth} />
                 <TableCell>
                   <Button
                     variant="contained"
