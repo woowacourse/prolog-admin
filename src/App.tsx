@@ -13,8 +13,6 @@ import RoadmapTopKeywordsPage from './customPages/RoadmapTopKeywordsPage';
 import Members from './reactAdminPages/Member';
 import MissionCreate from './reactAdminPages/MissionCreate';
 import Missions from './reactAdminPages/Missions';
-import SessionCreate from './reactAdminPages/SessionCreate';
-import Sessions from './reactAdminPages/Sessions';
 
 const dataProvider = jsonServerProvider(BASE_URL);
 
@@ -22,7 +20,7 @@ function App() {
   return (
     <Admin layout={MyLayout} dataProvider={dataProvider}>
       <Resource name="missions" list={Missions} create={MissionCreate} />
-      <Resource name="sessions" list={Sessions} create={SessionCreate} />
+      {/* <Resource name="sessions" list={Sessions} create={SessionCreate} /> */}
       <CustomRoutes>
         <Route path="/members" element={<Members />} />
         <Route path="/studylogs" element={<PopularStudylogsUpdate />} />
