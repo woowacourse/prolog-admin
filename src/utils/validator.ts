@@ -11,14 +11,14 @@ export type ValidatorFunction = (
 type checkFormatFunction = (value: string, optionalValue?: string) => boolean;
 
 const checkNameFormat: checkFormatFunction = (text) => {
-  return text.length < 2 || text.length > 10;
+  return text.length < 1 || text.length > 16;
 };
 
 export const validateName: ValidatorFunction = (text: string) => {
   if (checkNameFormat(text)) {
     return {
       isValidated: false,
-      message: '키워드 이름은 2자 이상 10자 미만으로 입력해주세요',
+      message: '키워드 이름은 1자 이상 16자 미만으로 입력해주세요',
     };
   }
   return { isValidated: true, message: '올바른 입력입니다.' };
