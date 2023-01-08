@@ -30,8 +30,6 @@ export const CustomTableCell = ({
     }
   };
 
-  console.log('depth', depth);
-
   return (
     <>
       {Object.values(item).map((itemValue, index) => {

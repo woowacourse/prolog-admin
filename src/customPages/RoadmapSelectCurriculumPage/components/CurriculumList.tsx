@@ -87,10 +87,7 @@ const CurriculumList = () => {
                   </Button>
                 </TableCell>
                 <TableCell
-                  onClick={() => {
-                    console.log('row', row);
-                    selectCurriculum(row.id);
-                  }}
+                  onClick={() => selectCurriculum(row.id)}
                   align="right"
                 >
                   <Button variant="contained">선택</Button>

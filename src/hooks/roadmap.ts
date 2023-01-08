@@ -291,9 +291,6 @@ export const useSelectedKeyword = ({
       select(data) {
         const normarlizedKeywordList = normalizeKeyword(data);
 
-        console.log('normarlizedKeywordList', normarlizedKeywordList);
-        console.log('selectedKeywordId', selectedKeywordId);
-
         return normarlizedKeywordList.find(
           (k) => k.keywordId === selectedKeywordId
         );
@@ -348,7 +345,6 @@ export const useDeleteKeyword = () => {
 
   return useMutation(deleteKeyword, {
     onSuccess(_, { sessionId }) {
-      console.log([QUERY_KEY.childKeywordList, sessionId]);
       queryClient.invalidateQueries([QUERY_KEY.childKeywordList, sessionId]);
     },
   });
