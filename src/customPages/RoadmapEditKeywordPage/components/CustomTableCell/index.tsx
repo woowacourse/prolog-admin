@@ -14,6 +14,24 @@ export const CustomTableCell = ({
   const queryParams = useQueryParams();
   const navigate = useNavigate();
 
+  const handleRecommendedPostsButtonClick = () => {
+    if (location.href.includes('editRecommendedPosts')) {
+      const search =
+        depth === 1
+          ? `?second=${item.keywordId}`
+          : depth === 2
+          ? `?second=${queryParams.second}&thrid=${item.keywordId}`
+          : '';
+      navigate({
+        search,
+      });
+    } else {
+      navigate(`/roadmap/${sessionId}/${keywordId}/editRecommendedPosts`, {
+        state: item,
+      });
+    }
+  };
+
   const handleSubKeywordButtonClick = () => {
     if (location.href.includes('editSubKeywords')) {
       const search =
@@ -39,9 +57,21 @@ export const CustomTableCell = ({
           }
           return (
             <TableCell key={index} component="th" scope="row">
-              <Button variant="contained" onClick={handleSubKeywordButtonClick}>
-                하위 키워드({itemValue.length}개) 목록 보기
-              </Button>
+              {index === 6 ? (
+                <Button
+                  variant="contained"
+                  onClick={handleRecommendedPostsButtonClick}
+                >
+                  추천 포스트({itemValue.length}개) 목록 보기
+                </Button>
+              ) : (
+                <Button
+                  variant="contained"
+                  onClick={handleSubKeywordButtonClick}
+                >
+                  하위 키워드({itemValue.length}개) 목록 보기
+                </Button>
+              )}
             </TableCell>
           );
         }

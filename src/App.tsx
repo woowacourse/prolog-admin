@@ -5,6 +5,7 @@ import MyLayout from './Layout';
 import { BASE_URL } from './client';
 import PopularStudylogsUpdate from './customPages/PopularStudylogsUpdatePage';
 import RoadmapEditKeywordPage from './customPages/RoadmapEditKeywordPage';
+import RoadmapRecommendedPostsPage from './customPages/RoadmapRecommendedPostsPage';
 import RoadmapQuizsPage from './customPages/RoadmapQuizsPage';
 import RoadmapSelectCurriculumPage from './customPages/RoadmapSelectCurriculumPage';
 import RoadmapSelectSessionPage from './customPages/RoadmapSelectSessionPage';
@@ -32,6 +33,10 @@ function App() {
         <Route
           path="/roadmap/:sessionId"
           element={<RoadMapSelectTopKeywordPage />}
+        />
+        <Route
+          path="/roadmap/:sessionId/:keywordId/editRecommendedPosts"
+          element={<RoadmapRecommendedPostsPage />}
         />
         <Route
           path="/roadmap/:sessionId/:keywordId/quizs"

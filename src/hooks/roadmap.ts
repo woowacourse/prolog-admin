@@ -7,6 +7,7 @@ const QUERY_KEY = {
   topKeywordList: 'topKeywordList',
   childKeywordList: 'childKeywordList',
   quizListByKeyword: 'quizListByKeyword',
+  recommendedPostListByKeyword: 'recommendedPostListByKeyword',
   deleteKeyword: 'deleteKeyword',
   curriculums: 'curriculums',
 };
@@ -304,6 +305,152 @@ export const useSelectedKeyword = ({
   };
 };
 
+// RecommendedPost
+
+// [R] keyword 별 RecommendedPost 목록 조회(public)
+export const getRecommendedPostListByKeyword = async ({
+  sessionId,
+  keywordId,
+}: RecommendedPostListByKeywordRequest) => {
+  const response = await client.get<RecommendedPostListResponse>(
+    `/sessions/${sessionId}/keywords/${keywordId}`
+  );
+  return response.data;
+};
+
+export const useGetRecommendedPostListByKeyword = ({
+  sessionId,
+  keywordId,
+}: RecommendedPostListByKeywordRequest) => {
+  const { data } = useQuery(
+    [QUERY_KEY.recommendedPostListByKeyword, sessionId, keywordId],
+    () =>
+      getRecommendedPostListByKeyword({
+        sessionId,
+        keywordId,
+      })
+  );
+
+  return {
+    recommendedPostList: data?.recommendedPosts,
+  };
+};
+
+type AddRecommendedPostRequest = {
+  keywordId: number;
+  url: string;
+};
+
+export const addRecommendedPost = ({
+  keywordId,
+  url,
+}: AddRecommendedPostRequest) =>
+  client.post(`/keywords/${keywordId}/recommended-posts`, {
+    url,
+  });
+
+export const useAddRecommendedPost = ({
+  keywordId,
+}: Pick<AddRecommendedPostRequest, 'keywordId'>) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    (url: Pick<AddRecommendedPostRequest, 'url'>['url']) =>
+      addRecommendedPost({
+        keywordId,
+        url,
+      }),
+    {
+      onSuccess() {
+        queryClient.invalidateQueries([
+          QUERY_KEY.recommendedPostListByKeyword,
+          keywordId,
+        ]);
+      },
+    }
+  );
+};
+
+type EditRecommendedPostRequest = {
+  keywordId: number;
+  recommendedPost: RecommendedPost;
+};
+
+export const editRecommendedPost = ({
+  keywordId,
+  recommendedPost,
+}: EditRecommendedPostRequest) =>
+  client.put(`/keywords/${keywordId}/recommended-posts/${recommendedPost.id}`, {
+    url: recommendedPost.url,
+  });
+
+export const useEditRecommendedPost = ({
+  keywordId,
+}: Pick<EditRecommendedPostRequest, 'keywordId'>) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    (
+      recommendedPost: Pick<
+        EditRecommendedPostRequest,
+        'recommendedPost'
+      >['recommendedPost']
+    ) =>
+      editRecommendedPost({
+        keywordId,
+        recommendedPost,
+      }),
+    {
+      onSuccess() {
+        queryClient.invalidateQueries([
+          QUERY_KEY.recommendedPostListByKeyword,
+          keywordId,
+        ]);
+      },
+    }
+  );
+};
+
+type DeleteRecommendedPostRequest = {
+  keywordId: number;
+  recommendedPostId: number;
+};
+
+export const deleteRecommendedPost = ({
+  keywordId,
+  recommendedPostId,
+}: DeleteRecommendedPostRequest) =>
+  client.delete(
+    `/keywords/${keywordId}/recommended-posts/${recommendedPostId}`
+  );
+
+export const useDeleteRecommendedPost = ({
+  keywordId,
+}: Pick<DeleteRecommendedPostRequest, 'keywordId'>) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    (
+      recommendedPostId: Pick<
+        DeleteRecommendedPostRequest,
+        'recommendedPostId'
+      >['recommendedPostId']
+    ) =>
+      deleteRecommendedPost({
+        keywordId,
+        recommendedPostId,
+      }),
+    {
+      onSuccess() {
+        queryClient.invalidateQueries([
+          QUERY_KEY.recommendedPostListByKeyword,
+          keywordId,
+        ]);
+      },
+    }
+  );
+};
+
 // Quiz
 
 // 10. [R] Keyword별 Quiz 목록 조회(public)
@@ -534,6 +681,7 @@ type SessionAndKeywordId = {
 
 export type KeywordRequest = SessionAndKeywordId;
 export type ChildKeywordListRequest = SessionAndKeywordId;
+export type RecommendedPostListByKeywordRequest = SessionAndKeywordId;
 export type QuizListByKeywordRequest = SessionAndKeywordId;
 export type DeleteKeywordRequest = SessionAndKeywordId;
 export type EditKeywordRequest = SessionAndKeywordId & {
@@ -562,6 +710,7 @@ export type KeywordResponse = {
   importance: number;
   parentKeywordId: number;
   description: string;
+  recommendedPost: RecommendedPost[];
   childrenKeywords: KeywordResponse[] | null;
 };
 
@@ -573,6 +722,15 @@ export interface KeywordListResponse {
 
 export interface TopKeywordListResponse {
   data: TopKeywordResponse[];
+}
+
+export type RecommendedPost = {
+  id: number;
+  url: string;
+};
+
+export interface RecommendedPostListResponse {
+  recommendedPosts: RecommendedPost[];
 }
 
 export type Quiz = {
