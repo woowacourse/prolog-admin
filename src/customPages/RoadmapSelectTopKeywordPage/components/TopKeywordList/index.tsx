@@ -12,6 +12,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useGetTopKeywordList } from '../../../../hooks/roadmap';
 import { translateColumns } from '../../../../utils/translate';
 
+const RECOMMENDED_POST_INDEX = 6;
+
 const TopKeywordList = () => {
   const navigate = useNavigate();
   const { sessionId } = useParams();
@@ -42,7 +44,7 @@ const TopKeywordList = () => {
             >
               {Object.values(row).map((value, index) => (
                 <TableCell key={index} component="th" scope="row">
-                  {value}
+                  <>{index === RECOMMENDED_POST_INDEX ? '' : value}</>
                 </TableCell>
               ))}
               <TableCell

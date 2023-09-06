@@ -9,6 +9,7 @@ const columnNameTranslator = {
   parentKeywordId: '상위 키워드의 Id',
   description: '설명',
   childrenKeywords: '하위 키워드',
+  recommendedPosts: '추천 포스트 목록',
 
   // Quiz
   quizId: '퀴즈 Id',

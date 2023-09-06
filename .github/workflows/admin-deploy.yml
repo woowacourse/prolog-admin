@@ -23,7 +23,7 @@ jobs:
           yarn install
       - name: Build
         run: |
-          yarn build
+          yarn build:prd
         env:
           CI: false
 
