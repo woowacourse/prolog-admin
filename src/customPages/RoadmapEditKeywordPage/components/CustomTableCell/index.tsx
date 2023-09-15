@@ -3,6 +3,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { KeywordResponse } from '../../../../hooks/roadmap';
 import { useQueryParams } from '../../../../hooks/useQueryParams';
 
+const RECOMMENDED_POST_INDEX = 8;
+
 export const CustomTableCell = ({
   item,
   depth,
@@ -20,13 +22,13 @@ export const CustomTableCell = ({
         depth === 1
           ? `?second=${item.keywordId}`
           : depth === 2
-          ? `?second=${queryParams.second}&thrid=${item.keywordId}`
-          : '';
+            ? `?second=${queryParams.second}&thrid=${item.keywordId}`
+            : '';
       navigate({
         search,
       });
     } else {
-      navigate(`/roadmap/${sessionId}/${keywordId}/editRecommendedPosts`, {
+      navigate(`/roadmap/${sessionId}/${item.keywordId}/editRecommendedPosts`, {
         state: item,
       });
     }
@@ -38,8 +40,8 @@ export const CustomTableCell = ({
         depth === 1
           ? `?second=${item.keywordId}`
           : depth === 2
-          ? `?second=${queryParams.second}&thrid=${item.keywordId}`
-          : '';
+            ? `?second=${queryParams.second}&thrid=${item.keywordId}`
+            : '';
       navigate({
         search,
       });
@@ -57,7 +59,7 @@ export const CustomTableCell = ({
           }
           return (
             <TableCell key={index} component="th" scope="row">
-              {index === 6 ? (
+              {index === RECOMMENDED_POST_INDEX ? (
                 <Button
                   variant="contained"
                   onClick={handleRecommendedPostsButtonClick}

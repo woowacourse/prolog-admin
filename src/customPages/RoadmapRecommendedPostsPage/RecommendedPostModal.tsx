@@ -42,7 +42,6 @@ const RecommendedPostModal = ({
     }
 
     if (prevRecommendedPost) {
-      console.log(prevRecommendedPost);
       await editRecommendedPost({
         id: prevRecommendedPost?.id,
         url: url.value,

@@ -12,7 +12,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useGetTopKeywordList } from '../../../../hooks/roadmap';
 import { translateColumns } from '../../../../utils/translate';
 
-const RECOMMENDED_POST_INDEX = 6;
+const RECOMMENDED_POST_INDEX = 8;
 
 const TopKeywordList = () => {
   const navigate = useNavigate();
