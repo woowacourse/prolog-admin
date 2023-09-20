@@ -20,7 +20,7 @@ export type Curriculum = {
 };
 
 export const getCurriculums = async () => {
-  const response = await client.get<{ data: Curriculum[] }>('/curriculums');
+  const response = await client.get<{ data: Curriculum[] }>('/admin/curriculums');
 
   return response.data;
 };
@@ -38,7 +38,7 @@ type CurriculumRequest = {
 };
 
 export const addCurriculum = async (body: CurriculumRequest) => {
-  const response = await client.post('/curriculums', body);
+  const response = await client.post('/admin/curriculums', body);
 
   return response.data;
 };
@@ -54,7 +54,7 @@ export const useAddCurriculumMutation = () => {
 };
 
 export const editCurriculum = async (id: number, body: CurriculumRequest) => {
-  const response = await client.put(`/curriculums/${id}`, body);
+  const response = await client.put(`/admin/curriculums/${id}`, body);
 
   return response.data;
 };
@@ -70,7 +70,7 @@ export const useEditCurriculumMutation = (id: number) => {
 };
 
 export const deleteCurriculum = async (id: number) => {
-  const response = await client.delete(`/curriculums/${id}`);
+  const response = await client.delete(`/admin/curriculums/${id}`);
 
   return response.data;
 };
@@ -89,7 +89,7 @@ export const useDeleteCurriculumMutation = () => {
 
 export const getSessions = async (curriculumId: number) => {
   const response = await client.get<{ sessions: Session[] }>(
-    `/curriculums/${curriculumId}/sessions`
+    `/admin/curriculums/${curriculumId}/sessions`
   );
 
   return response.data;
@@ -115,7 +115,7 @@ export const addSession = async (
   body: SessionRequest
 ) => {
   const response = await client.post(
-    `/curriculums/${curriculumId}/sessions`,
+    `/admin/curriculums/${curriculumId}/sessions`,
     body
   );
 
@@ -139,7 +139,7 @@ export const editSession = async (
   body: SessionRequest
 ) => {
   const response = await client.put(
-    `/curriculums/${curriculumId}/sessions/${id}`,
+    `/admin/curriculums/${curriculumId}/sessions/${id}`,
     body
   );
 
@@ -162,7 +162,7 @@ export const useEditSessionMutation = (id: number, curriculumId: number) => {
 // 백엔드와 상의후 불필요한 curriculumId 제거
 export const deleteSession = async (curriculumId: number, id: number) => {
   const response = await client.delete(
-    `/curriculums/${curriculumId}/sessions/${id}`
+    `/admin/curriculums/${curriculumId}/sessions/${id}`
   );
 
   return response.data;
@@ -182,7 +182,7 @@ export const useDeleteSessionMutation = (curriculumId: number) => {
 
 export const getKeyword = async ({ sessionId, keywordId }: KeywordRequest) => {
   const response = await client.get<KeywordResponse>(
-    `/sessions/${sessionId}/keywords/${keywordId}`
+    `/admin/sessions/${sessionId}/keywords/${keywordId}`
   );
 
   return response.data;
@@ -210,7 +210,7 @@ export const useGetKeyword = ({
 // 5. 세션별 Keyword 목록 조회
 export const getTopKeywordList = async (sessionId: number) => {
   const response = await client.get<TopKeywordListResponse>(
-    `/sessions/${sessionId}/keywords`
+    `/admin/sessions/${sessionId}/keywords`
   );
 
   return response.data;
@@ -232,7 +232,7 @@ export const getChildKeywordList = async ({
   keywordId,
 }: ChildKeywordListRequest) => {
   const response = await client.get<KeywordResponse>(
-    `/sessions/${sessionId}/keywords/${keywordId}/children`
+    `/admin/sessions/${sessionId}/keywords/${keywordId}/children`
   );
 
   return response.data;
@@ -313,7 +313,7 @@ export const getRecommendedPostListByKeyword = async ({
   keywordId,
 }: RecommendedPostListByKeywordRequest) => {
   const response = await client.get<RecommendedPostListResponse>(
-    `/sessions/${sessionId}/keywords/${keywordId}`
+    `/admin/sessions/${sessionId}/keywords/${keywordId}`
   );
   return response.data;
 };
@@ -345,7 +345,7 @@ export const addRecommendedPost = ({
   keywordId,
   url,
 }: AddRecommendedPostRequest) =>
-  client.post(`/keywords/${keywordId}/recommended-posts`, {
+  client.post(`/admin/keywords/${keywordId}/recommended-posts`, {
     url,
   });
 
@@ -380,7 +380,7 @@ export const editRecommendedPost = ({
   keywordId,
   recommendedPost,
 }: EditRecommendedPostRequest) =>
-  client.put(`/keywords/${keywordId}/recommended-posts/${recommendedPost.id}`, {
+  client.put(`/admin/keywords/${keywordId}/recommended-posts/${recommendedPost.id}`, {
     url: recommendedPost.url,
   });
 
@@ -421,7 +421,7 @@ export const deleteRecommendedPost = ({
   recommendedPostId,
 }: DeleteRecommendedPostRequest) =>
   client.delete(
-    `/keywords/${keywordId}/recommended-posts/${recommendedPostId}`
+    `/admin/keywords/${keywordId}/recommended-posts/${recommendedPostId}`
   );
 
 export const useDeleteRecommendedPost = ({
@@ -459,7 +459,7 @@ export const getQuizListByKeyword = async ({
   keywordId,
 }: QuizListByKeywordRequest) => {
   const response = await client.get<QuizListResponse>(
-    `/sessions/${sessionId}/keywords/${keywordId}/quizs`
+    `/admin/sessions/${sessionId}/keywords/${keywordId}/quizs`
   );
 
   return response.data;
@@ -485,7 +485,7 @@ export const useGetQuizListByKeyword = ({
 
 // 2. [D] Keyword 삭제(admin)
 export const deleteKeyword = ({ sessionId, keywordId }: DeleteKeywordRequest) =>
-  client.delete(`/sessions/${sessionId}/keywords/${keywordId}`);
+  client.delete(`/admin/sessions/${sessionId}/keywords/${keywordId}`);
 
 export const useDeleteKeyword = () => {
   const queryClient = useQueryClient();
@@ -507,7 +507,7 @@ export const editKeyword = ({
   parentKeywordId,
   description,
 }: EditKeywordRequest) =>
-  client.put(`/sessions/${sessionId}/keywords/${keywordId}`, {
+  client.put(`/admin/sessions/${sessionId}/keywords/${keywordId}`, {
     name,
     order,
     importance,
@@ -534,7 +534,7 @@ export const addKeyword = ({
   parentKeywordId,
   description,
 }: AddKeywordRequest) =>
-  client.post(`/sessions/${sessionId}/keywords`, {
+  client.post(`/admin/sessions/${sessionId}/keywords`, {
     name,
     order,
     importance,
@@ -560,7 +560,7 @@ type AddQuizRequest = {
 };
 
 export const addQuiz = ({ sessionId, keywordId, question }: AddQuizRequest) =>
-  client.post(`/sessions/${sessionId}/keywords/${keywordId}/quizs`, {
+  client.post(`/admin/sessions/${sessionId}/keywords/${keywordId}/quizs`, {
     question,
   });
 
@@ -597,7 +597,7 @@ type EditQuizRequest = {
 
 export const editQuiz = ({ sessionId, keywordId, quiz }: EditQuizRequest) =>
   client.put(
-    `/sessions/${sessionId}/keywords/${keywordId}/quizs/${quiz.quizId}`,
+    `/admin/sessions/${sessionId}/keywords/${keywordId}/quizs/${quiz.quizId}`,
     {
       question: quiz.question,
     }
@@ -639,7 +639,7 @@ export const deleteQuiz = ({
   keywordId,
   quizId,
 }: DeleteQuizRequest) =>
-  client.delete(`/sessions/${sessionId}/keywords/${keywordId}/quizs/${quizId}`);
+  client.delete(`/admin/sessions/${sessionId}/keywords/${keywordId}/quizs/${quizId}`);
 
 export const useDeleteQuiz = ({
   sessionId,
